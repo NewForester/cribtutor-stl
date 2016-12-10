@@ -1,0 +1,82 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Introduction </h1>
+
+<h2> STL Components </h2>
+
+<p>
+The <em>Standard Template Library</em> comprises a large number of class and function templates that may be divided into:
+<ol>
+<li><em>containers</em> - class templates to hold collections of value-objects of the same base type</li>
+<li><em>algorithms</em> - function templates that operate on containers,</li>
+<li><em>iterators</em>  - pointers-like objects that refer to value-objects in containers,</li>
+<li><em>functors</em>   - function objects for use by algorithms,</li>
+<li><em>streams</em>    - classes for program input and output,</li>
+<li><em>strings</em>    - containers for character strings,</li>
+<li><em>numerics</em>   - class and function templates for numeric computation </li>
+<li><em>utilities</em>  - the rest.</li>
+</ol>
+</p>
+
+<p>
+All STL components reside in the <em>std</em> namespace except where stated otherwise.
+</p>
+
+
+<h3> Class Template Typedefs </h3>
+
+<p>
+STL class templates define typedefs as well as methods.
+</p>
+
+<p>
+The ones most commonly encountered are the container <em>iterator</em> types as in:
+<pre>
+    vector&lt; int &gt;::iterator     vector_it = myVector.begin();
+</pre>
+and the <em>map</em> container key-value type as in:
+<pre>
+    multimap&lt; int,string &gt;::value_type    element = *myMap.begin();
+</pre>
+The others have uses in generic programming, template specialisation
+and the implementation of application specific containers and algorithms.
+</p>
+
+
+<h3> Exceptions </h3>
+
+STL containers are robust in the face of exceptions.
+
+<p>
+The <em>at</em>() method is designed to throw the <em>out_of_range</em> exception
+while the operator[] does not (behaviour is generally undefined).
+</p>
+
+<p>
+<em>Insert</em> operations (including push_back() and push_front()) involve calling an allocator that may legitimately throw <em>bad_alloc</em>.
+</p>
+<p>
+When an exception is thrown inserting a single value-object, <em>all</em> container types guarantee the container is unchanged.
+</p>
+<p>
+When an exception is thrown inserting a several value-objects, <em>sequence</em> container types guarantee the container is unchanged
+but <em>associative</em> containers only guarantee the container is in a consistent state.
+</p>
+
+<p>
+<em>Erase</em> operations (including pop_back() and pop_front()) do not throw.
+</p>
+
+<p>
+<em>Other</em> methods should not throw but this depends on the implementation of application specific classes.
+</p>
+
+<p>
+The STL uses the default and copy constructors, operator=, operator&lt; and operator== of <em>value-object</em> types.
+Implementations of these in well defined application specific classes should not throw.
+</p>
+
+<p>
+The STL algorithms, in particular, use <em>functors</em>.
+The STL does not catch exceptions thrown by application specific functors.
+</p>
