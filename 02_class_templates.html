@@ -1,0 +1,101 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Introduction </h1>
+
+<h2> STL Class Templates </h2>
+
+
+<h3> Containers </h3>
+
+<p>
+STL containers (sometimes known as collections)
+are designed to contain value-objects of the same (base) type.
+</p><p>
+The C/C++ array is an example of a simple container (but one with no methods).
+</p>
+
+<p>
+The container classes are generally divided into:
+<ol><!-- Shuffle List -->
+<li><em>sequence</em>    - where the order of value-objects is under the control of the application</li>
+<li><em>associative</em> - where value-objects are accessed by key</li>
+<li><em>adaptor</em>     - that provide alternative interfaces to sequence containers</li>
+<li>non-standard         - special purpose containers</li>
+</ol>
+</p>
+
+<p>
+The STL sequence containers are:
+<ol><!-- Shuffle List -->
+<li><em>vector</em>&lt;&gt;     - C++ arrays that can grow and run-time</li>
+<li><em>deque</em>&lt;&gt;      - double ended queues</li>
+<li><em>list</em>&lt;&gt;       - double linked lists</li>
+</ol>
+</p>
+
+<p>
+The STL associative containers are:
+<ol><!-- Shuffle List -->
+<li><em>map</em>&lt;&gt;        - with unique keys to access value-objects</li>
+<li><em>multimap</em>&lt;&gt;   - with non-unique keys to access value-objects</li>
+<li><em>set</em>&lt;&gt;        - with value-objects as unique keys</li>
+<li><em>multiset</em>&lt;&gt;   - with value-objects as non-unique keys</li>
+</ol>
+</p>
+
+<p>
+The STL container adaptors are:
+<ol><!-- Shuffle List -->
+<li><em>stack</em>&lt;&gt;          - a last-in-first out sequence</li>
+<li><em>queue</em>&lt;&gt;          - a first-in-first out sequence</li>
+<li><em>priority_queue</em>&lt;&gt; - with the 'largest' element at the 'front'</li>
+</ol>
+</p>
+
+<p>
+Examples of non-standard containers are:
+<ol><!-- Shuffle List -->
+<li><em>basic_string</em>&lt;&gt;   - for character strings (of various types)</li>
+<li><em>bitset</em>&lt;&gt;         - for packed, fixed size sequences of bits</li>
+</ol>
+</p>
+
+<p>
+Different STL containers have different internal <em>organisations</em>
+to meet different needs but they share a large subset of common <b>methods</b>.
+Container organisation is <em>independent</em> of the objects contained.
+</p>
+
+<p>
+Trade-offs in container design include <em>functionality</em> and time <em>complexity</em>.
+</p>
+
+<p>
+vector&lt;&gt; and deque&lt;&gt; support <em>random access</em>;
+list&lt;&gt; and (most) associative containers do not.
+A consequence of this is that the latter cannot be used with a number of algorithms
+but are provided with a richer set of methods to compensate.
+Container methods are always to be preferred over eponymous <em>algorithms</em>.
+</p>
+
+<p>
+Different containers have different <em>time</em> complexities for the same operations.
+Search operations are generally O(N), aka <em>linear</em>, complexity for sequence containers
+and O(log N), aka <em>logarithmic</em>, complexity for associative containers.
+Some container operations have, by design, O(1), aka <em>constant</em>, complexity.
+</p>
+
+
+<h3> Other Class Templates </h3>
+
+<p>
+Other STL class templates include:
+<ol><!-- Shuffle List -->
+<li><em>iterators</em>          - references to value-objects in containers with pointer like behaviour</li>
+<li><em>functors</em>           - that provide objects that can be called like a function</li>
+<li><em>pair</em>               - an abstraction of the key-value relationship</li>
+<li><em>smart pointers</em>     - abstractions of pointers that avoid some pointer caveats</li>
+<li><em>allocators</em>         - an abstraction of new and delete expressions</li>
+</ol>
+There are also template classes of which complex is an example.
+</p>

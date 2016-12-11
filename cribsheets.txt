@@ -2,3 +2,4 @@
 
 0_introduction.html
 01_components.html
+02_class_templates.html
