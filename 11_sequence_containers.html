@@ -1,0 +1,148 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Containers </h1>
+
+<p>
+The STL sequence containers are:
+<ol>
+<li>vector&lt;&gt;</li>
+<li>deque&lt;&gt;</li>
+<li>list&lt;&gt;</li>
+</ol>
+C++ arrays are also sequence containers but without methods.
+</p>
+
+<h2> Sequence Container Overview </h2>
+
+
+<h3> Container Properties </h3>
+
+<p>
+The <em>order</em> of the objects in sequence containers is under the control of the application.
+</p>
+
+<p>
+Different sequence container types have different internal <em>organisations</em>
+to meet different needs but they share a large subset of common <b>methods</b>.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+Prefer <em>deque</em>&lt;&gt; unless there is <em>good reason</em> to use one of the other container types.
+</li><li>
+Prefer <em>vector</em>&lt;&gt; when compatibility with C/C++ <em>arrays</em> is required.
+</li><li>
+Pointers to  C/C++ arrays can be used as iterators with most <em>algorithms</em>
+but arrays have no container methods and cannot be <em>resized</em> at run-time.
+</li><li>
+Prefer <em>list</em>&lt;&gt; when it offers better <em>performance</em> and you do not need array syntax.
+</li><li>
+Prefer a container <em>adaptor</em> when one of these offers the required <em>semantics</em>
+and you do not need iterators or algorithms.
+</li></ol>
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+list&lt;&gt; may be a better choice when you need to <em>insert/erase</em> objects from the <em>middle</em>, rather than the <em>ends</em>, of the container.
+</li><li>
+list&lt;&gt; may be a better choice when you need to <em>change</em> the order of objects and the <em>number</em> of objects is large.
+</li><li>
+list&lt;&gt; may be a better choice when you can use the list specific <em>methods</em> extensively.
+</li></ol>
+</p>
+
+
+<h3> Common Container Methods </h3>
+
+<p>
+The sequence containers have a great many methods in common.
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+The sequence container construction methods are the to-be-expected:
+<ul>
+<li><em>constructor</em>,</li>
+<li><em>destructor</em> and </li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+The sequence container iterator methods are:
+<ul>
+<li><em>begin</em>(),</li>
+<li><em>end</em>(),</li>
+<li><em>rbegin</em>() and</li>
+<li><em>rend</em>().</li>
+</ul>
+</p>
+
+<p>
+The sequence container capacity methods are:
+<ul>
+<li><em>empty</em>(),</li>
+<li><em>size</em>(),</li>
+<li><em>max_size</em>() and</li>
+<li><em>resize</em>().</li>
+</ul>
+</p>
+
+<p>
+The access methods supported by all sequence container types are:
+<ul>
+<li><em>front</em>(),</li>
+<li><em>back</em>().</li>
+</ul>
+</p>
+
+<p>
+The modifier methods supported by all sequence container types are:
+<ul>
+<li><em>assign</em>(),</li>
+<li><em>insert</em>(),</li>
+<li><em>erase</em>(),</li>
+<li><em>swap</em>(),</li>
+<li><em>clear</em>(),</li>
+<li><em>push_back</em>() and</li>
+<li><em>pop_back</em>().</li>
+</ul>
+</p>
+
+<h3> Container Specific Methods </h3>
+
+<!-- Shuffle On -->
+
+<p>
+<em>vector</em>&lt;&gt; offers two additional capacity methods:
+<ul>
+<li><em>capacity</em>() and</li>
+<li><em>reserve</em>().</li>
+</ul>
+
+</p><p>
+<em>list</em>&lt;&gt; does not offer the random access methods:
+<em>at</em>() and
+<em>operator[]</em>.
+
+</p><p>
+<em>vector</em>&lt;&gt; does not offer the modifier methods:
+<ul>
+<li><em>push_front</em>() and</li>
+<li><em>pop_front</em>().</li>
+</ul>
+
+</p><p>
+<em>list</em>&lt;&gt; offers the additional modifier methods:
+<ul>
+<li><em>merge</em>(),</li>
+<li><em>remove</em>(),</li>
+<li><em>remove_if</em>(),</li>
+<li><em>reverse</em>(),</li>
+<li><em>sort</em>(),</li>
+<li><em>splice</em>() and</li>
+<li><em>unique</em>().</li>
+</ul>
+</p>
