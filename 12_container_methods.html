@@ -1,0 +1,176 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Containers </h1>
+
+<h2> Sequence Container Methods </h2>
+
+
+<h3> Constructors </h3>
+
+<p>
+The sequence containers support the standard and unremarkable:
+<ul>
+<li><em>default constructor</em>,</li>
+<li><em>copy constructor</em>,</li>
+<li><em>destructor</em> and</li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+There are three additional constructors for sequence containers.
+<ol><!-- Shuffle List --><li>
+The form &apos;sequence(nn,v_obj)&apos; initialises a container
+with &apos;nn&apos; <em>copies</em> of &apos;v_obj&apos;.
+</li><li>
+The form &apos;sequence(nn)&apos; initialises a container
+with &apos;nn&apos; objects created using their <em>default</em> constructor.
+</li><li>
+The form &apos;sequence(first,last)&apos; initialises a container
+with copies of the objects in the <em>range</em> &apos;[first,last)&apos;.
+</li></ol>
+</p>
+
+<p>
+The <em>iterator range</em> has to refer to objects of compatible (base) type
+but not necessarily to a <em>container</em> of the same type.
+Anything that provides forward iterator behaviour can be used,
+including pointers to a C++ arrays.
+<pre>
+    int             array[] = {5, 4, 3, 2, 1};
+    vector&lt;int&gt;     myVector(array, array + 5);
+</pre>
+</p>
+
+
+<h3> Iterator Methods </h3>
+
+<p>
+Each container type has four member functions that return an iterator.
+<ol><!-- Shuffle List --><li>
+<em>begin</em>() returns an iterator that points to the first object in a container
+and is typically used to initialise an iterator.
+</li><li>
+<em>rbegin</em>() returns an iterator that points to the last object in a container
+and is typically used to initialise a reverse iterator.
+</li><li>
+<em>end</em>() returns an iterator that points to an imaginary object one beyond the last in the container
+and is typically used to determine when to stop &apos;iterating&apos;.
+</li><li>
+<em>rend</em>() returns an iterator that points to an imaginary object one before the first in the container
+and is typically used to determine when to stop &apos;reverse iterating&apos;.
+</li></ol>
+</p>
+
+
+<h3> Capacity Methods </h3>
+
+<p>
+Each container type has the same capcity methods.
+<ol><!-- Shuffle List --><li>
+<em>size</em>() returns the number of objects currently in the container.
+</li><li>
+<em>max_size</em>() returns the implementation dependent
+maximum number of objects that may be stored in containers of this type.
+</li><li>
+<em>empty</em>() returns true if the container is currently empty.
+It it to be preferred to &apos;size() == 0&apos; for performance reasons.
+</li><li>
+<em>resize</em>(new_size,v_obj) resizes by erasing or inserting objects at the &apos;end&apos; of the container.
+If objects are inserted, they are copies of &apos;v_obj&apos;.
+</li><li>
+<em>resize</em>(new_size) resizes by erasing or inserting objects at the &apos;end&apos; of the container.
+If objects are inserted, they are created using their default constructor.
+</li></ol>
+</p>
+
+
+<h3> Access Methods </h3>
+
+<p>
+There are four access methods.
+<ol><!-- Shuffle List --><li>
+<em>front</em>() returns a reference to the first object in a container.
+</li><li>
+<em>back</em>() returns a reference to the last object in a container.
+</li><li>
+operator<em>[]</em> returns a reference to nth object in the container.
+There is no range check.
+</li><li>
+<em>at</em>(n) returns a reference to the nth object in the container but
+performs a range check first and throws an out_of_range exception when this fails.
+</li></ol>
+</p>
+
+<p>
+<em>list</em>&lt;&gt; does not support operator[] and the at() method.
+</p>
+
+
+<h3> Modifier Methods </h3>
+
+<p>
+There a dozen or so modifier method variants.
+<ol><!-- Shuffle List --><li>
+<em>assign</em>(nn,v_obj) erases the current contents of a container
+and replaces them with
+&apos;nn&apos; copies of &apos;v_obj&apos;.
+</li><li>
+<em>assign</em>(first,last) erases the current contents of a container
+and replaces them with
+copies of the objects within the range &apos;[first,last)&apos;.
+</li><li>
+<em>insert</em>(d_it,v_obj) inserts &apos;v_obj&apos;
+before the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>insert</em>(d_it,nn,v_obj) inserts &apos;nn&apos; copies of &apos;v_obj&apos;
+before the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>insert</em>(d_it,first,last) inserts copies of the objects within the range &apos;[first,last)&apos;
+before the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>erase</em>(d_it) erases the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>erase</em>(first,last) erases the objects within the range &apos;[first,last)&apos;.
+</li><li>
+<em>swap</em>(another) swaps the contents of this container with &apos;another&apos;.
+</li><li>
+<em>clear</em>() erases all objects in the container.
+</li><li>
+<em>push_front</em>() inserts an object at the &apos;front&apos; of a container.
+</li><li>
+<em>pop_front</em>() erases the object at the &apos;front&apos; of a container.
+</li><li>
+<em>push_back</em>() inserts a value-object at the &apos;back&apos; of a container.
+</li><li>
+<em>pop_back</em>() erases the value-object at the &apos;back&apos; of a container.
+</li></ol>
+</p>
+
+<p>
+<em>vector</em>&lt;&gt; does not support push_front() and pop_front()
+and
+<em>list</em>&lt;&gt; offers another nine modifier methods.
+</p>
+
+<p>
+<em>pop_back</em>() erases the value-object at the &apos;back&apos; of a container
+but does not return the object:  use <em>back</em>() beforehand.
+</p>
+
+<p>
+<em>pop_front</em>() erases the value-object at the &apos;front&apos; of a container
+but does not return the object:  use <em>front</em>() beforehand.
+</p>
+
+<p>
+The global function <em>swap</em>() overloads to call the member function.
+The containers must be of the same type but not necessarily the same size.
+All iterators remain valid but afterwards point to different containers.
+</p>
+
+<p>
+Beware the effect of these methods on iterators:
+assume all are invalidated for <em>vector</em> and <em>deque</em> containers
+but that all are still valid for <em>list</em> containers.
+</p>
