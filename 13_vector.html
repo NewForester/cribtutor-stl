@@ -1,0 +1,72 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Containers </h1>
+
+<h2> The vector Container </h2>
+
+<p>
+The vector container is like a C++ array that can grow as needed.
+</p>
+
+<p>
+Objects are stored <em>contiguously</em>
+and <em>growth</em> implies copying objects already in the container.
+</p>
+
+<p>
+Iterators are <em>random access</em>.
+Random access to value-objects has <em>constant</em> complexity.
+</p>
+
+<p>
+Insert and erase operations at the back of a vector have <em>constant</em> complexity;
+elsewhere they have <em>linear</em> complexity.
+</p>
+
+<p>
+Iterators, references and pointers are <em>invalidated</em> when a vector is resized,
+which can occur with insert but not with erase operations.
+The methods
+<ul>
+<li><em>capacity</em>() and</li>
+<li><em>reserve</em>()</li>
+</ul>
+give some control over when this happens.
+</p>
+
+<p>
+To use vector containers include the &lt;<em>vector</em>&gt; header file.
+</p>
+
+<p>
+For vector&lt;&gt;, the template definition is:
+<pre>
+    template&lt; typename T, class Allocator=allocator&lt;T&gt; &gt; class vector;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the container.
+
+</p><p>
+The class Allocator defines the <em>allocator</em> used when copying objects into the container.
+It is a very advanced option.
+The default uses global new() and delete().
+</p>
+
+<p>
+Note: vector&lt;bool&gt; is a specialisation that does not behave like a standard sequence container.
+Consider using deque&lt;bool&gt; instead,
+</p>
+
+
+<h3> Vector Specific Methods </h3>
+
+<p>
+vector&lt;&gt; has extra capacity methods that may be used to avoid frequent memory reallocation.
+<ol><!-- Shuffle List --><li>
+<em>capacity</em>() returns the number of objects a vector could contain without memory reallocation.
+This is greater than or equal to size().
+</li><li>
+<em>reserve</em>(nn) increases the capacity so that it not less than nn.
+It will not shrink the container.
+</li></ol>
+</p>
