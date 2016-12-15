@@ -1,0 +1,65 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Containers </h1>
+
+<h2> The deque Container </h2>
+
+<p>
+The deque container supports rapid insertion/deletion at either end of the sequence
+and random access to value-objects anywhere in the sequence.
+</p>
+<p>
+The name stands for <em>double ended</em> queue.
+Objects are not stored <em>contiguously</em>.
+Think of it as a double linked list of arrays:
+growth does not imply copying objects already in the container.
+</p>
+
+<p>
+Iterators are <em>random access</em>.
+Random access to value-objects has <em>constant</em> complexity.
+</p>
+
+<p>
+Insert and erase operations at either end of a deque have <em>constant</em> complexity;
+elsewhere they have <em>linear</em> complexity.
+</p>
+
+<p>
+Except for <em>erase</em> at the back of the sequence,
+insert and erase operations <em>invalidate</em> iterators.
+</p><p>
+Insert and erase operations at either end of the sequence
+do not invalidate <em>references</em> and <em>pointers</em> to other value-objects.
+</p>
+
+<p>
+To use deque containers include the &lt;<em>deque</em>&gt; header file.
+</p>
+
+<p>
+For deque&lt;&gt;, the template definition is:
+<pre>
+    template&lt; typename T, class Allocator=allocator&lt;T&gt; &gt; class deque;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the container.
+
+</p><p>
+The class Allocator defines the <em>allocator</em> used when copying objects into the container.
+It is a very advanced option.
+The default uses global new() and delete().
+</p>
+
+
+<h3> Deque Specific Methods </h3>
+
+<p>
+deque&lt;&gt; supports
+<ul>
+<li><em>push_front</em>() and</li>
+<li><em>pop_front</em>().</li>
+</ul>
+These invalidate <em>iterators</em>, but not references or pointers,
+to other value-objects in the sequence.
+</p>
