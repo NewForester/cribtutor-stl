@@ -1,0 +1,115 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Containers </h1>
+
+<h2> The list Container </h2>
+
+<p>
+The list container is, logically, a double linked list.
+</p>
+
+</p><p>
+In general, operations that change the <em>order</em> of value-objects
+are less <em>costly</em> than for the other sequence containers.
+</p>
+
+<p>
+Iterators are <em>bi-directional</em>: <em>random access</em> to value-objects is not supported.
+</p>
+
+<p>
+Insert and erase operations have <em>constant</em> complexity anywhere in a list.
+However, seeking to an arbitrary position beforehand has <em>linear</em> complexity.
+</p>
+
+<p>
+The recommended complexity for <em>size</em>() is constant but the standard allows linear.
+</p>
+
+<p>
+Insert and erase operations do not <em>invalidate</em> iterators, references or pointers
+to other value-objects in a list.
+</p>
+
+<p>
+To use list containers include the &lt;<em>list</em>&gt; header file.
+</p>
+
+<p>
+For list&lt;&gt;, the template definition is:
+<pre>
+    template&lt; typename T, class Allocator=allocator&lt;T&gt; &gt; class list;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the container.
+
+</p><p>
+The class Allocator defines the <em>allocator</em> used when copying objects into the container.
+It is a very advanced option.
+The default uses global new() and delete().
+</p>
+
+
+<h3> List Specific Methods </h3>
+
+<p>
+list&lt;&gt; supports
+<ul>
+<li><em>push_front</em>() and</li>
+<li><em>pop_front</em>().</li>
+</ul>
+</p>
+
+<p>
+The list specific modifier methods are to preferred over eponymous algorithms.
+<ol><!-- Shuffle List --><li>
+<em>remove</em>(v_obj) erases all objects that match to &apos;v_obj&apos; using &apos;equal_to&lt;&gt;&apos; as comparator.
+</li><li>
+<em>remove_if</em>(ufp) erases all objects for which the unary predicate &apos;ufp&apos; returns true.
+</li><li>
+<em>reverse</em>() reverses the order of objects in a list.
+</li><li>
+<em>sort</em>([bfp]) orders the objects in a list
+using &apos;less&lt;&gt;&apos; or the comparator &apos;bfp&apos; if supplied.
+</li><li>
+<em>merge</em>(another) merges the objects from &apos;another&apos; list with this list
+using &apos;less&lt;&gt;&apos; or the comparator &apos;bfp&apos; if supplied.
+</li><li>
+<em>splice</em>(d_it,another,s_it) splices the value-object pointed to by the iterator &apos;s_it&apos; in
+&apos;another&apos; list before the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>splice</em>(d_it,another,first,last) splices the objects from the range &apos;[first,last)&apos; in
+&apos;another&apos; list before the value-object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>splice</em>(d_it,another) splices the objects from
+&apos;another&apos; list before the value-object pointed to by the iterator &apos;d_it&apos;.
+using &apos;equal_to&lt;&gt;&apos; or the comparator &apos;bfp&apos; if supplied.
+</li><li>
+<em>unique</em>([bfp]) erases &apos;adjacent duplicate&apos; objects from a list
+using &apos;equal_to&lt;&gt;&apos; or the comparator &apos;bfp&apos; if supplied.
+</li></ol>
+</p>
+
+<p>
+The sort() and merge() methods are <em>stable</em>:  objects that are equal retain their relative order.
+For merge(), in the case of equality, the merged objects appear <em>after</em> those already present.
+</p>
+
+<p>
+Both lists should have been ordered (using the same comparator) before calling <em>merge</em>().
+</p>
+
+<p>
+First order the list in order to all duplicates using <em>unique</em>().
+</p>
+
+<p>
+The reverse(), splice() and merge() methods <em>move</em> objects, instead of copying them:
+there is no constructor/destructor overhead.
+This implies splice() and merge() remove objects from the second source container.
+</p>
+
+<p>
+sort() has <em>linearithmic</em>, O(N log N), complexity.
+Other methods have linear or constant complexity.
+</p>
