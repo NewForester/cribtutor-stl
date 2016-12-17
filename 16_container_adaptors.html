@@ -1,0 +1,216 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Sequence Adaptors </h1>
+
+<p>
+The STL sequence container adaptors are:
+<ol>
+<li>stack&lt;&gt;</li>
+<li>queue&lt;&gt;</li>
+<li>priority_queue&lt;&gt;</li>
+</ol>
+</p>
+
+<h2> Container Adaptors </h2>
+
+<p>
+The container adaptors are not <em>new</em> container types but <em>alternative</em> interfaces
+to a container that provides <em>storage</em>.
+</p><p>
+The <em>template</em> declaration of an <em>adaptor</em> determines the <em>type</em> of the storage <em>container</em>.
+</p><p>
+The storage is generally provided by a <em>sequence</em> container but you could provide your own.
+</p><p>
+The <em>methods</em> provided by these adaptors are <em>proxies</em> that call methods of the <em>storage</em> container.
+</p><p>
+Adaptors do not provide <em>iterators</em> and cannot be used with <em>algorithms</em>.
+</p>
+
+<h3> Adaptor Methods </h3>
+
+<!-- Shuffle On -->
+
+<p>
+The adaptor construction methods are the to-be-expected:
+<ul>
+<li><em>constructor</em>,</li>
+<li><em>destructor</em> and</li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+The adaptor capacity methods are:
+<ul>
+<li><em>size</em>() and</li>
+<li><em>empty</em>().</li>
+</ul>
+</p>
+
+<p>
+The access method for
+<ul>
+<li><em>stack</em>&lt;&gt; and</li>
+<li><em>priority_queue</em>&lt;&gt;</li>
+</ul>
+is:
+<li><em>top</em>().</li>
+</p>
+
+<p>
+The access methods for <em>queue</em>&lt;&gt; are:
+<ul>
+<li><em>front</em>() and</li>
+<li><em>back</em>().</li>
+</ul>
+</p>
+
+<p>
+The adaptor modifier methods are:
+<ul>
+<li><em>push</em>(),</li>
+<li><em>pop</em>().</li>
+</ul>
+</p>
+
+<h3> Adaptor Constructors </h3>
+
+<p>
+The container adaptors support the standard and unremarkable:
+<ul>
+<li><em>default constructor</em>,</li>
+<li><em>copy constructor</em>,</li>
+<li><em>destructor</em> and</li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+They also offer one or two additional constructors.
+<ol><!-- Shuffle List --><li>
+<em>stack</em>(container) initialises a stack&apos;s the storage container by copying in the objects from another &apos;container&apos;.
+The two containers need not be the same type.
+</li><li>
+<em>queue</em>(container) initialises a queue&apos;s the storage container by copying in the objects from another &apos;container&apos;.
+The two containers need not be the same type.
+</li><li>
+<em>priority_queue</em>(comparator,container) initialises the storage container by copying in the objects from another &apos;container&apos;.
+The two containers need not be the same type.
+<!--- I still can't see the use for the first parameter. -->
+</li><li>
+<em>priority_queue</em>(first,last) initialises the storage container by copying in the objects in the range &apos;[first,last)&apos;.
+The order of objects in the adaptor will very likely not be the same as in the source range.
+</li></ol>
+Beware priority_queue&lt;&gt; is different.
+</p>
+
+<p>
+For the <em>copy</em> constructor and <em>operator=</em>, the source must be an adaptor of the same type
+with the same type of storage container and, for <em>priority_queue</em>&lt;&gt;, the same comparator.
+</p>
+
+
+<h3> The stack Adaptor </h3>
+
+<p>
+The stack adaptor implements a LIFO sequence.
+</p>
+
+<p>
+To use the stack adaptor include the &lt;<em>stack</em>&gt; header file.
+</p>
+
+<p>
+The <em>push</em>() and <em>pop</em>() methods are proxies for <em>push_back</em>() and <em>pop_back</em>() respectively.
+</p><p>
+The <em>top</em>() method is a proxy for <em>back</em>().
+</p>
+
+<p>
+The stack&lt;&gt; template definition is:
+<pre>
+    template&lt; typename T, class Container=deque&lt;T&gt; &gt; class stack;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the stack.
+</p><p>
+The class Container defines the storage container.
+The default is <em>deque</em>&lt;&gt; but any <em>sequence</em> container can be used.
+</p>
+
+
+<h3> The queue Adaptor </h3>
+
+<p>
+The queue adaptor implements a FIFO sequence.
+</p>
+
+<p>
+To use the queue adaptor include the &lt;<em>queue</em>&gt; header file.
+</p>
+
+<p>
+The <em>push</em>() and <em>pop</em>() methods are proxies for <em>push_back</em>() and <em>pop_front</em>() respectively.
+</p><p>
+The
+<ul>
+<li><em>front</em>() and</li>
+<li><em>back</em>()</li>
+</ul>
+methods are simple proxies.
+</p>
+
+<p>
+The queue&lt;&gt; template definition is:
+<pre>
+    template&lt; typename T, class Container=deque&lt;T&gt; &gt; class queue;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the queue.
+</p><p>
+The class Container defines the storage container.
+The storage container must provide front() and pop_front().
+The default is <em>deque</em>&lt;&gt; but <em>list</em>&lt;&gt; can also be used.
+</p>
+
+
+<h3> The priority_queue Adaptor </h3>
+
+<p>
+The priority_queue adaptor
+implements a &apos;max heap&apos;
+in which the first value-object in the storage container is always the largest.
+</p>
+
+<p>
+To use the priority_queue adaptor include the &lt;<em>queue</em>&gt; header file.
+</p>
+
+<p>
+A priority_queue has a <em>comparator</em>:
+objects are stored in &apos;descending&apos; heap order.
+The <em>top</em> (head) of a priority_queue is at the <em>front</em> of the container.
+</p><p>
+The <em>push</em>() and <em>pop</em>() methods are proxies for <em>push_back</em>() and <em>pop_back</em>() respectively.
+</p><p>
+They also involve calls to <em>push_heap</em>() and <em>pop_heap</em>() algorithms to ensure heap order is maintained.
+</p><p>
+The <em>top</em>() method is a proxy for <em>front</em>().
+Note this always returns a <em>const</em> reference.
+</p>
+
+<p>
+The priority_queue&lt;&gt; template definition is:
+<pre>
+    template&lt; typename T, class Container=vector&lt;T&gt; class Comparator=less&lt;T&gt; &gt; class priority_queue;
+</pre>
+</p><p>
+The typename T is the type of the <em>value-objects</em> stored in the priority_queue.
+</p><p>
+The class Container defines the storage container.
+The storage container must provide randon access iterators.
+The default is <em>vector</em>&lt;&gt; but <em>deque</em>&lt;&gt; can also be used.
+</p><p>
+The class Comparator defines the priority order.
+The default is <em>less</em>&lt;&gt;.
+</p>
