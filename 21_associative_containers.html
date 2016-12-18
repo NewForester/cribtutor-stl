@@ -1,0 +1,132 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Associative Containers </h1>
+
+<p>
+The STL associative containers are:
+<ol>
+<li>set&lt;&gt; and multiset&lt;&gt;</li>
+<li>map&lt;&gt; and multimap&lt;&gt;</li>
+</ol>
+</p>
+
+<h2> Associative Container Overview </h2>
+
+
+<h3> Container Properties </h3>
+
+<p>
+In associative containers, walue objects are accessible by <em>key</em>.
+The key is <em>immutable</em>.
+</p>
+
+<p>
+A key-value <em>pair</em>&lt;&gt; is stored in <em>map</em> containers while
+in <em>set</em> containers the key is the value.
+</p>
+<p>
+For <em>set</em> and <em>map</em> containers the key is unique;
+for <em>multiset</em> and <em>multimap</em> containers duplicate keys are allowed.
+</p>
+
+<p>
+The order of the objects in an associative container
+is determined by a <em>comparator</em>
+that supports <em>strict weak ordering</em>
+to produce a (balanced) <em>binary tree</em>.
+</p><p>
+The default <em>less</em>&lt;&gt; is usually sufficient.
+but the key class must support <em>operator&lt;</em>.
+</p>
+
+<p>
+The comparator is a <em>binary</em> predicate and usually will be implemented using a <em>functor</em>.
+</p><p>
+The functor will be passed two keys to compare.
+If passed by <em>reference</em>, they must be <em>const</em> since keys are immutable.
+</p>
+
+<p>
+The notion of <em>equivalence</em> replaces <em>equality</em>:
+a and b are equivalent if Compare(a,b) and Compare(b,a) are both false.
+</p>
+
+<p>
+The use of binary trees means most operations have <em>logarithmic</em> complexity.
+However, with the right parameters, insert() operations are faster.
+erase() operations have <em>constant</em> complexity.
+</p>
+
+<p>
+Some associative container <em>methods</em> duplicate the functionality of eponymous <em>algorithms</em>.
+The methods have the better performance and are to be preferred.
+</p>
+
+
+<h3> Container Methods </h3>
+
+<p>
+Many of the methods have the same name and intent as their eponymous sequence container methods.
+</p><p>
+All but one method is common to all associative containers.
+The exception is <em>operator[]</em>, which only make senses for the <em>map</em>&lt;&gt; container.
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+The associative container construction methods are the to-be-expected:
+<ul>
+<li><em>constructor</em>,</li>
+<li><em>destructor</em> and</li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+The associative container iterator methods are:
+<ul>
+<li><em>begin</em>(),</li>
+<li><em>end</em>(),</li>
+<li><em>rbegin</em>() and </li>
+<li><em>rend</em>().</li>
+</ul>
+</p>
+
+<p>
+The associative container capacity methods are:
+<ul>
+<li><em>empty</em>(),</li>
+<li><em>size</em>() and </li>
+<li><em>max_size</em>().</li>
+</ul>
+</p>
+
+<p>
+The only associative container access method is:
+<ul>
+<li><em>operator[]</em></li>
+</ul>
+and only <em>map</em>&lt;&gt; supports it.
+</p>
+
+<p>
+The associative container modifier methods are:
+<ul>
+<li><em>insert</em>(),</li>
+<li><em>erase</em>(),</li>
+<li><em>swap</em>() and </li>
+<li><em>clear</em>().</li>
+</ul>
+</p>
+
+<p>
+The associative container search methods are:
+<ul>
+<li><em>find</em>(),</li>
+<li><em>count</em>(),</li>
+<li><em>lower_bound</em>(),</li>
+<li><em>upper_bound</em>() and </li>
+<li><em>equal_range</em>().</li>
+</ul>
+</p>
