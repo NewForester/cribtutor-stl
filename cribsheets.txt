@@ -16,5 +16,6 @@
 # Associative Containers
 
 21_associative_containers.html
+22_container_methods.html
 
 # EOF

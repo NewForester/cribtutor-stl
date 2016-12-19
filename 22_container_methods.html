@@ -1,0 +1,190 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Associative Containers </h1>
+
+<h2> Associative Container Methods </h2>
+
+<p>
+For <em>map</em> containers, a key/object is a &apos;value_type&apos; <em>pair</em>&lt;&gt;.
+</p>
+<p>
+For <em>set</em> containers, a key/object is both <em>key</em> and <em>value-object</em>.
+</p>
+
+
+<h3> Constructors </h3>
+
+<p>
+The associative containers support the standard and unremarkable:
+<ul>
+<li><em>default constructor</em>,</li>
+<li><em>copy constructor</em>,</li>
+<li><em>destructor</em> and</li>
+<li><em>operator=</em>.</li>
+</ul>
+</p>
+
+<p>
+The form &apos;container(first,last)&apos; initialises a container
+with copies of the objects from the <em>range</em> &apos;[first,last)&apos;.
+</p>
+
+<p>
+The <em>iterator range</em> has to refer to objects of compatible (base) type
+but not necessarily to a <em>container</em> of the same type.
+Anything that provides forward iterator behaviour can be used,
+including pointers to a C++ arrays.
+<pre>
+    int             array[] = {5, 4, 3, 2, 1};
+    set&lt;int&gt;        mySet(array, array + 5);
+</pre>
+</p>
+
+<p>
+The <em>value-objects</em> in the <em>source</em> iterator range
+do not need to be <em>ordered</em>.
+</p>
+
+<p>
+For <em>set</em> and <em>map</em> containers
+duplicates are <em>silently</em> eliminated during construction.
+</p><p>
+For <em>map</em> containers
+the iterators usually refer to another map container
+since the source iterators must dereference to compatible <em>pair</em>&lt;&gt; structures.
+</p>
+
+
+<h3> Iterator Methods </h3>
+
+<p>
+Each container type has four member functions that return an iterator.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>begin</em>() returns an iterator that points to the first object in a container
+and is typically used to initialise an iterator.
+</li><li>
+<em>rbegin</em>() returns an iterator that points to the last object in a container
+and is typically used to initialise a reverse iterator.
+</li><li>
+<em>end</em>() returns an iterator that points to an imaginary object one beyond the last in the container
+and is typically used to determine when to stop &apos;iterating&apos;.
+</li><li>
+<em>rend</em>() returns an iterator that points to an imaginary object one before the first in the container
+and is typically used to determine when to stop &apos;reverse iterating&apos;.
+</li></ol>
+</p>
+
+<p>
+Iterators for associative containers are <em>bi-directional</em>: they support <em>decrement</em> as well as <em>increment</em>.
+</p><p>
+For <em>set</em> containers there is effectively no difference between the normal and <em>const</em> iterators.
+This is because, logically, they return pointers to <em>immutable</em> keys.
+</p><p>
+For <em>map</em> containers the normal iterator allows modification of the <em>value</em> but not the <em>key</em>.
+</p>
+
+
+<h3> Capacity Methods </h3>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>size</em>() returns the number of objects in a container.
+</li><li>
+<em>max_size</em>() returns the implementation dependent
+maximum number of objects that may be stored in a container.
+</li><li>
+<em>empty</em>() returns true if the container is empty.
+It it to be preferred to &apos;size() == 0&apos; for performance reasons.
+</li></ol>
+</p>
+
+
+<h3> Access Methods </h3>
+
+<p>
+Only <em>map</em>&lt;&gt; has any access methods and it has only <em>operator[]</em>.
+</p><p>
+operator[] returns an <em>iterator</em> that can be used as an <em>lvalue</em> or an <em>rvalue</em> (as you would expect).
+</p><p>
+This means that if the key does not exist, it will be created so that a value-object may be assigned to it.
+</p><p>
+Therefore, never use this method to test whether a key exists.
+Use
+<ul>
+<li><em>find</em>()</li> or
+<li><em>count</em>()</li>
+</ul>instead.
+</p><p>
+Also note that while map&lt;&gt; supports operator[], its bi-directional <em>iterators</em> do not.
+</p>
+
+
+<h3> Modifier Methods </h3>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>insert</em>(k_obj) attempts to insert the key/object &apos;k_obj&apos;.
+It returns a pair&lt;&gt; structure.
+</li><li>
+<em>insert</em>(d_it,k_obj) attempts to insert the key/object &apos;k_obj&apos;.
+The iterator &apos;d_it&apos; suggests insertion after the object it points to.
+It is only a hint but, if correct, the operation is faster with constant complexity.
+</li><li>
+<em>insert</em>(first,last) inserts copies of the key/objects with the range &apos;[first,last)&apos;.
+If the range is (suitably) ordered, the insertion is faster with linear complexity.
+</li><li>
+<em>erase</em>(d_it) erases the key/object pointed to by the iterator &apos;d_it&apos;.
+</li><li>
+<em>erase</em>(key) erases all key/objects whose key matches &apos;key&apos;.
+It returns the number of key/objects erased.
+</li><li>
+<em>erase</em>(first,last) erases the key/objects in the range &apos;[first,last)&apos;.
+</li><li>
+<em>swap</em>(another) swaps the contents of this container with &apos;another&apos;.
+</li><li>
+<em>clear</em>() erases all objects in the container.
+</li></ol>
+</p>
+
+<p>
+insert(k_obj) returns a &apos;[iterator,bool]&apos; pair&lt;&gt;.
+The bool is <em>true</em> if the key/object was inserted
+and the iterator points to the <em>inserted</em> key/object.
+Otherwise <em>false</em> indicates the iterator points to
+a <em>matching</em> key/object already present in the container.
+</p>
+
+<p>
+The global function <em>swap</em>() overloads to call the member function.
+The two containers must be of the same <em>type</em> but not necessarily the same <em>size</em>.
+All <em>iterators</em> remain valid but afterwards point to different containers.
+</p>
+
+
+<h3> Search Methods </h3>
+
+<p>
+These methods are based on the container's <em>strict weak ordering</em>.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>find</em>(k_obj) returns the iterator of the (first) matching key/object found in the container.
+It returns &apos;end()&apos; if the key is not found.
+</li><li>
+<em>count</em>(k_obj) returns a count of the number of times a matching key/object occurs in the container.
+</li><li>
+<em>lower_bound</em>(k_obj) returns an iterator that points to the first key/object that
+does not compare less than &apos;k_obj&apos; or &apos;end()&apos; if not found.
+</li><li>
+<em>upper_bound</em>(k_obj) returns an iterator that points to the first key/object for which
+&apos;k_obj&apos; compares less than or &apos;end()&apos; if not found.
+</li><li>
+<em>equal_range</em>(k_obj) combines the *_bound methods to produce an [iterator,iterator] pair&lt;&gt;
+that defines the range for which key/objects will be neither less than nor greater than &apos;k_obj&apos;.
+If there is no such range, the iterators in the pair will be equal.
+</li></ol>
+</p>
