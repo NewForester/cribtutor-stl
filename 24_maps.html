@@ -1,0 +1,61 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Associative Containers </h1>
+
+<h2> The map and multimap Containers </h2>
+
+<p>
+map&lt;&gt; and multimap&lt;&gt; are associative containers
+in which &apos;[<em>key</em>,<em>value</em>]&apos; pair&lt;&gt; structures are stored in <em>ascending</em> order by key.
+</p><p>
+<em>multimap</em>&lt;&gt; allows duplicate keys, <em>map</em>&lt;&gt; does not.
+Keys are <em>immutable</em>.
+</p>
+
+<p>
+Search and (in general) insertion operations have <em>logarithmic</em> complexity.
+Erase by iterator has <em>constant</em> complexity.
+</p><p>
+Iterators are <em>bi-directional</em> but <em>map</em>&lt;&gt; supports random access.
+Insert and erase operations do not <em>invalidate</em> iterators.
+</p><p>
+Iterators point to &apos;[key,value]&apos; <em>pair</em>&lt;&gt; structures so compatibility within iterators for other types of containers is limited.
+This affects constructors and insert operations that takes an iterator <em>range</em>.
+</p>
+
+<p>
+To use map&lt;&gt; and multimap&lt;&gt; containers include the &lt;<em>map</em>&gt; header file.
+</p>
+
+<p>
+For map&lt;&gt; and multimap&lt;&gt;, the template definitions are:
+<pre>
+    template&lt; typename Key, typename T, class Compare=less&lt;Key&gt;, class Allocator=allocator&lt;pair&lt;const Key, T&gt; &gt; &gt; class map;
+
+    template&lt; typename Key, typename T, class Compare=less&lt;Key&gt;, class Allocator=allocator&lt;pair&lt;const Key, T&gt; &gt; &gt; class multimap;
+</pre>
+</p><p>
+The typename Key is the type of the <em>key</em> and typename T the type of the <em>value-objects</em> stored in the container.
+They need not be the same type.
+
+</p><p>
+The class Compare defines the <em>comparator</em> used to order objects within the container.
+It is an advanced option.
+User-defined classes must implement the pertinent operator (the default is <em>operator&lt;</em>).
+
+</p><p>
+The class Allocator defines the <em>allocator</em> used when copying objects into the container.
+It is a very advanced option.
+The default uses global new() and delete().
+
+</p><p>
+Note, from the declaration of the allocator, what is stored in a map container
+is a <em>pair</em>&lt;&gt;.
+</p><p>
+There is a useful value_type defined:
+<pre>
+    typedef pair&lt;const Key, T&gt; value_type;
+</pre>
+The <em>first</em> is the immutable key and the <em>second</em> is the value-object.
+
+</p>

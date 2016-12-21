@@ -18,5 +18,6 @@
 21_associative_containers.html
 22_container_methods.html
 23_sets.html
+24_maps.html
 
 # EOF
