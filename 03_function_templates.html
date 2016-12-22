@@ -1,0 +1,78 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Introduction </h1>
+
+<h2> STL Function Templates </h2>
+
+
+<h3> Algorithms </h3>
+
+<p>
+Almost all algorithms are designed to operate on ranges of value-objects in containers.
+</p>
+
+<p>
+Algorithms may be divided into:
+<ol>
+<li><em>non-modifying sequence</em>     algorithms - that typically search for value-objects</li>
+<li><em>modifying sequence</em>         algorithms - that typically alter order or composition of a container</li>
+<li><em>sort</em> and <em>search</em>   algorithms - that typically work with binary trees</li>
+<li><em>merge</em> and <em>set</em>     algorithms - that combine two container ranges to produce a third</li>
+<li>other                               algorithms - that do not fit into these catagories</li>
+</ol>
+</p>
+
+<p>
+Examples of other algorithms are:
+<ol><!-- Shuffle List -->
+<li><em>uninitialised memory</em>       that create sequences of value-objects in uninitialised memory</li>
+<li><em>heap</em>                       that create and maintain a heap data organisation</li>
+<li><em>permutations</em>               that allow processing of all permutations of a sequence</li>
+<li><em>numerics</em>                   inner product etc</li>
+</ol>
+</p>
+
+<p>
+STL algorithms are designed to be <em>general purpose</em> and are not container specific.
+Some require <em>random access</em> iterators and cannot be used with <em>list</em>&lt;&gt; or <em>associative</em> containers.
+</p>
+
+<p>
+Since <em>associative</em> container contents are always <em>ordered</em>,
+algorithms should not be used to <em>modify</em> them
+but such containers can be used with algorithms to provide <em>read-only</em> source ranges.
+</p>
+
+<p>
+Some container <em>types</em> provide methods with the same name as an algorithm.
+The <em>methods</em> are always faster than the <em>algorithms</em> and are to be <em>preferred</em>.
+</p>
+
+<p>
+Different algorithms have different <em>time</em> complexities,
+usually O(log N), aka <em>logarithmic</em>, or O(N log N), aka <em>linearithmic</em>.
+Each STL implementation is required to satisfy
+the time complexities given in the standard
+but the complexities are inherent in the underlying mathematical algorithm.
+</p>
+
+
+<h3> Other Function Templates </h3>
+
+<p>
+Other STL function templates are provided to support:
+<ol><!-- Shuffle List -->
+<li><em>iterators</em>          - for example distance()</li>
+<li><em>pair</em>&lt;&gt;       - for example make_pair()</li>
+</ol>
+Relational operators may also be implemented as function templates rather than as class template methods.
+</p>
+
+<p>
+The following algorithms do not require iterators:
+<ol><!-- Shuffle List -->
+<li><em>swap</em>()     - swap two objects</li>
+<li><em>min</em>()      - return the smaller of two objects</li>
+<li><em>max</em>()      - return the larger of two objects</li>
+</ol>
+</p>
