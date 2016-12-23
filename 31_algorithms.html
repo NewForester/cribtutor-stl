@@ -1,0 +1,262 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Algorithms </h1>
+
+
+<h2> Algorithm Overview </h2>
+
+<p>
+STL algorithms are template functions that operate (almost always) on STL containers.
+</p><p>
+To use algorithms, include the &lt;<em>algorithm</em>&gt; header file.
+</p><p>
+Algorithms may be divided into:
+<ol>
+<li><em>non-modifying</em> and <em>modifying</em> sequence algorithms,</li>
+<li><em>sort</em> and binary <em>search</em> algorithms,</li>
+<li><em>merge</em> and <em>set</em> algorithms,</li>
+<li>other algorithms.</li>
+</ol>
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+Almost all algorithms operate on one (or more) <em>iterator</em> ranges within one (or more) containers although often a range represents an <em>entire</em> container.
+</p><p>
+The <em>sequence</em> algorithms have no requirements as to the <em>order</em> of value-objects within container ranges.
+</p><p>
+The <em>sort</em> algorithms may be used on <em>sequence</em> containers to order the value-objects; they are <em>modifying</em>.
+</p><p>
+The <em>binary search</em> algorithms require <em>ordered</em> (aka sorted) container ranges; they are <em>non-modifying</em>.
+</p><p>
+The <em>set</em> algorithms operate on two ordered container ranges
+that do not <em>overlap</em>.
+Since these algorithms require a third container/range in which to place the result
+they are both modifying and non-modifying.
+</p>
+
+<!-- Shuffle Off -->
+
+<!-- Shuffle On -->
+
+<p>
+Algorithms do not <em>insert</em> or <em>erase</em> objects from containers but algorithms such as <em>remove</em>()
+may <em>reorder</em> the objects in a container in preparation for the use of the container method erase().
+</p><p>
+Containers methods are to be preferred over <em>eponymous</em> algorithms.
+Examples are <em>find</em>() and <em>count</em>() for associative containers.
+There are other examples are in <em>string</em>&lt;&gt;, which has a richer set of methods.
+</p>
+
+<p>
+For the algorithms that operate on the value-objects in one or more iterator <em>ranges</em>,
+the &apos;[start,end)&apos; iterators of the <em>first</em> range are always required but usually for additional ranges only the <em>start</em> iterator is required.
+</p><p>
+The implied <em>length</em> of additional ranges is that of the first and, importantly,
+it is assumed the pertinent containers are <em>long enough</em> to contain the implied ranges.
+</p>
+
+<!-- Shuffle Off -->
+
+
+<h3> Algorithms and Functors </h3>
+
+<p>
+Many algorithms take or may take a function or function object (aka <em>functor</em>), which the algorithm calls, as a parameter.
+For the sake of brevity, descriptions in this chapter refer to functors only.
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+Parameters to functors are usually the value-objects pointed to by <em>iterators</em>.
+They may be passed as <em>references</em> but should be declared <em>const</em> to prevent unexpected modification of container contents.
+</p><p>
+For <em>set</em> containers, functor parameters, references have to be const as what is passed are immutable keys.
+For <em>map</em> containers, what is passed are (references to) key-value pairs.
+</p>
+
+<p>
+<em>Unary</em> predicates are used by algorithms with names ending in &apos;_if&apos;.
+The predicate is called instead of comparing against a value-object.
+</p>
+
+<p>
+Comparators are optional parameters for many algorithms where they <em>override</em> the STL defaults (equal_to&lt;&gt; and less&lt;&gt;).
+</p><p>
+The template comparator <em>equal_to</em>&lt;&gt; invokes <em>operator==</em> to match objects in sequence containers whose contents are, typically, not <em>ordered</em>.
+</p><p>
+The template comparator <em>less</em>&lt;&gt; invokes <em>operator&lt;</em> to search for objects in containers whose contents are <em>ordered</em>.
+It is also used to order objects in containers.
+</p>
+
+<p>
+Comparators that provide an alternative sort order must implement <em>strict weak ordering</em>.
+The comparator used on an <em>ordered</em> range must be an equivalent of that used to <em>order</em> the range in the first place.
+</p>
+
+<!-- Shuffle Off -->
+
+
+<h2> Algorithm Summary </h2>
+
+<!-- Shuffle On -->
+
+<p>
+The 12 non-modifying sequence algorithms are (discounting variants):
+<ul>
+<li><em>for_each</em>(),</li>
+<li><em>count</em>(),</li>
+<li><em>find</em>(),</li>
+<li><em>search</em>()/<em>find_end</em>(),</li>
+<li><em>find_first_of</em>(),</li>
+<li><em>adjacent_find</em>(),</li>
+<li><em>mismatch</em>(),</li>
+<li><em>equal</em>(),</li>
+<li><em>search_n</em>(),</li>
+<li><em>max</em>()/<em>min</em>(),</li>
+<li><em>max_element</em>()/<em>min_element</em>() and</li>
+<li><em>lexicographical_compare</em>().</li>
+</ul>
+</p>
+
+<p>
+The following 3 non-modifying sequence algorithms take a unary functor as last parameter:
+<ul>
+<li><em>for_each</em>(),</li>
+<li><em>count_if</em>(),</li>
+<li><em>find_if</em>(),</li>
+</ul>
+</p>
+
+<p>
+The following 7 non-modifying sequence algorithms may take an equals comparator as last parameter:
+<ul>
+<li><em>search</em>(),</li>
+<li><em>find_end</em>(),</li>
+<li><em>find_first_of</em>(),</li>
+<li><em>adjacent_find</em>(),</li>
+<li><em>mismatch</em>(),</li>
+<li><em>equal</em>() and</li>
+<li><em>search_n</em>().</li>
+</ul>
+</p>
+
+<p>
+The following 5 non-modifying sequence algorithms may take a less than comparator as last parameter:
+<ul>
+<li><em>max</em>()/<em>min</em>(),</li>
+<li><em>max_element</em>()/<em>min_element</em>() and</li>
+<li><em>lexicographical_compare</em>().</li>
+</ul>
+</p>
+
+<p>
+The 10 modifying sequence operations are (discounting variants):
+<ul>
+<li><em>swap</em>(),</li>
+<li><em>fill</em>()/<em>generate</em>(),</li>
+<li><em>transform</em>(),</li>
+<li><em>random_shuffle</em>(),</li>
+<li><em>copy</em>(),</li>
+<li><em>remove</em>(),</li>
+<li><em>replace</em>(),</li>
+<li><em>reverse</em>(),</li>
+<li><em>rotate</em>() and</li>
+<li><em>unique</em>().</li>
+</ul>
+All have more than one variant.
+</p>
+
+<p>
+Only 2 modifying sequence algorithms allow the (destination) range length to be given explicitly:
+<ul>
+<li><em>fill_n</em>() and</li>
+<li><em>generate_n</em>().</li>
+</ul>
+</p>
+
+<p>
+The following 11 modifying sequence algorithms take a destination container as well as a source container:
+<ul>
+<li><em>swap_ranges</em>(),</li>
+<li><em>copy</em>(),</li>
+<li><em>copy_backwards</em>(),</li>
+<li><em>remove_copy</em>(),</li>
+<li><em>remove_copy_if</em>(),</li>
+<li><em>replace_copy</em>(),</li>
+<li><em>replace_copy_if</em>(),</li>
+<li><em>reverse_copy</em>(),</li>
+<li><em>rotate_copy</em>(),</li>
+<li><em>transform</em>() and</li>
+<li><em>unique_copy</em>().</li>
+</ul>
+Naturally, the source and destination container may be one and the same.
+</p>
+
+<p>
+The following 10 modifying sequence algorithms take or may take a functor (as last parameter except for replace algorithms):
+<ul>
+<li><em>generate</em>()/<em>generate_n</em>(),</li>
+<li><em>random_shuffle</em>(),</li>
+<li><em>remove_if</em>()/<em>remove_copy_if</em>(),</li>
+<li><em>replace_if</em>()/<em>replace_copy_if</em>(),</li>
+<li><em>transform</em>() and</li>
+<li><em>unique</em>()/<em>unique_copy</em>().</li>
+</ul>
+</p>
+
+<p>
+The 11 sort and binary search algorithms are:
+<ul>
+<li><em>sort</em>()/<em>stable_sort</em>(),</li>
+<li><em>partition</em>()/<em>stable_partition</em>(),</li>
+<li><em>partial_sort</em>()/<em>partial_sort_copy</em>(),</li>
+<li><em>nth_element</em>(),</li>
+<li><em>lower_bound</em>()/<em>upper_bound</em>(),</li>
+<li><em>equal_range</em>() and</li>
+<li><em>binary_search</em>().</li>
+</ul>
+All take an optional less than comparator.
+</p>
+
+<p>
+The 6 merge and set algorithms are:
+<ul>
+<li><em>merge</em>()/<em>inplace_merge</em>(),</li>
+<li><em>set_union</em>(),</li>
+<li><em>set_intersection</em>(),</li>
+<li><em>set_symmetric_difference</em>(),</li>
+<li><em>set_difference</em>() and</li>
+<li><em>includes</em>().</li>
+</ul>
+All take an optional less than comparator.
+</p>
+
+<p>
+The 2 algorithms that support permutations are:
+<ul>
+<li><em>next_permutation</em>()</li>
+<li><em>prev_permutation</em>()</li>
+</ul>
+</p>
+
+<p>
+The 4 algorithms that support the heap organisation are:
+<ul>
+<li><em>make_heap</em>()</li>
+<li><em>sort_heap</em>()</li>
+<li><em>push_heap</em>()</li>
+<li><em>pop_heap</em>()</li>
+</ul>
+</p>
+
+<p>
+The 3 algorithms that support uninitialised memory are:
+<ul>
+<li><em>uninitialized_copy</em>()</li>
+<li><em>uninitialized_fill</em>()</li>
+<li><em>uninitialized_fill_n</em>()</li>
+</ul>
+</p>

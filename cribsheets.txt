@@ -21,4 +21,8 @@
 23_sets.html
 24_maps.html
 
+# Algorithms
+
+31_algorithms.html
+
 # EOF
