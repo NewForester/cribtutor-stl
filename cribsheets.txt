@@ -24,5 +24,6 @@
 # Algorithms
 
 31_algorithms.html
+33_non-modifying.html
 
 # EOF

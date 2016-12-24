@@ -1,0 +1,140 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Algorithms </h1>
+
+<h2> Non-Modifying Sequence Algorithms </h2>
+
+<h3> General Remarks </h3>
+
+<p>
+The non-modifying sequence algorithms do not change the container or its contents.
+Some, such as for_each(), may be used to change objects but this not the STL intent
+and should be avoided.
+</p>
+
+<p>
+These algorithms are called sequence algorithms
+because they do not assume container contents are <em>ordered</em>.
+For <em>non-modifying</em> algorithms that do assume ordered container contents,
+see <em>set</em> and <em>binary search</em> algorithms.
+</p>
+
+<p>
+These algorithms are valid for all container types.
+</p><p>
+With map containers, a <em>pair</em>&lt;&gt; must be passed to find(), count() and search_n()
+but only the <em>key</em> is pertinent and the <em>value</em> is ignored.
+</p>
+
+<p>
+Most of these algorithms operate on
+the objects in an <em>iterator</em> range &apos;[first,last)&apos;.
+</p>
+
+<p>
+Many of these algorithms may take an optional <em>comparator</em> (&apos;bfp&apos;).
+Some of the exceptions require a <em>unary</em> functor (&apos;ufp&apos;).
+</p>
+
+
+<h3> The Algorithms </h3>
+
+<p>
+The following algorithms do not take a comparator.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>for_each</em>(first,last,ufp) calls &apos;ufp&apos;
+for each value-object in the range &apos;[first,last)&apos;.
+&apos;ufp&apos; is a functor with no return value.
+</li><li>
+<em>count</em>(first,last,v_obj) returns the number of value-objects in
+the range &apos;[first,last)&apos; that match &apos;v_obj&apos;.
+</li><li>
+<em>count_if</em>(first,last,ufp) calls the unary predicate &apos;ufp&apos;
+for each value-object in the range &apos;[first,last)&apos;
+and returns the number of times the predicate returns true.
+</li><li>
+<em>find</em>(first,last,v_obj) finds &apos;v_obj&apos; in
+the range &apos;[first,last)&apos;
+It returns the iterator of the first match, otherwise &apos;last&apos;.
+</li><li>
+<em>find_if</em>(first,last,ufp) calls the unary predicate &apos;ufp&apos;
+for each value-object in the range &apos;[first,last)&apos;
+returning the object's iterator the first time the predicate returns true,
+otherwise &apos;last&apos;.
+</li></ol>
+</p>
+
+<p>
+The following <em>search</em> algorithms may take an <em>optional</em> comparator (&apos;bfp&apos;)
+that must return true when two objects match (i.e. &apos;a == b&apos;).
+The default is <em>equal_to</em>&lt;&gt;. which requires the value-object class implements operator==.
+</p>
+<p>
+Most return the <em>iterator</em> for the matching value-object (or an iterator pair).
+These return &apos;<em>last</em>&apos; when no match is found.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>search</em>(first,last,start,end[,bfp]) searches forwards for
+the sequence &apos;[start,end)&apos;.
+It returns the iterator of the first object in the first matching sequence.
+</li><li>
+<em>find_end</em>(first,last,start,end[,bfp]) searches backwards for
+the sequence &apos;[start,end)&apos;.
+It returns the iterator of the first object in the last matching sequence.
+</li><li>
+<em>find_first_of</em>(first,last,start,end[,bfp]) searches for
+any value-object in &apos;[start,end)&apos;.
+It returns the iterator of the first matching object.
+</li><li>
+<em>adjacent_find</em>(first,last[,bfp]) searches for
+a pair of consecutive matching value-objects.
+It returns the iterator of the first object of the first match.
+</li><li>
+<em>mismatch</em>(first,last,start[,bfp]) compares the value-objects in
+the ranges &apos;[first,last)&apos; and &apos;[start,...)&apos;.
+It returns a pair&lt;&gt;:  the iterators of the first mismatch.
+</li><li>
+<em>equal</em>(first,last,start[,bfp]) compares the value-objects in
+the ranges &apos;[first,last)&apos; and &apos;[start,...)&apos;.
+It returns true if every pair of objects in the two ranges match.
+</li><li>
+<em>search_n</em>(first,last,count,v_obj[,bfp]) searches for a sequence of &apos;count&apos; value-objects
+that match &apos;v_obj&apos;.
+It returns the iterator of the first object of the first matching sequence.
+</li></ol>
+</p>
+
+<p>
+The following <em>comparison</em> algorithms may take an <em>optional</em> comparator (&apos;bfp&apos;)
+that must return true when the first object is &apos;less than&apos; the second (i.e. &apos;a &lt; b&apos;).
+The default is <em>less</em>&lt;&gt;, which requires the value-object class implements operator&lt;.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>max</em>(a_obj,b_obj[,bfp]) returns the larger of two value-objects.
+</li><li>
+<em>min</em>(a_obj,b_obj[,bfp]) returns the smaller of two value-objects.
+</li><li>
+<em>max_element</em>(first,last[,bfp]) return an iterator that points to
+the first occurrence of the largest value-object in the range &apos;[first,last)&apos;.
+</li><li>
+<em>min_element</em>(first,last[,bfp]) return an iterator that points to
+the first occurrence of the smallest value-object in the range &apos;[first,last)&apos;.
+</li><li>
+<em>lexicographical_compare</em>(first,last,start,end[,bfp])
+compares value-objects from two ranges &apos;[first,last)&apos; and &apos;[start,end)&apos;.
+It returns true when if the first range is less than the second.
+</li></ol>
+</p>
+
+<p>
+<em>lexicographical_compare</em>()
+will return true if a comparison returns true
+otherwise it will return true if the first range is shorter than the second.
+</p>
