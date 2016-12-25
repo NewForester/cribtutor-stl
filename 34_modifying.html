@@ -1,0 +1,221 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Algorithms </h1>
+
+<h2> Modifying Sequence Algorithms </h2>
+
+<h3> General Remarks </h3>
+
+<p>
+The modifying sequence algorithms change the order and/or composition of a container.
+There are many variants.
+</p>
+
+<p>
+These algorithms are called sequence algorithms
+because they do not assume container contents are <em>ordered</em>.
+For <em>modifying</em> algorithms that order and sort container contents,
+see <em>sort</em> algorithms.
+</p>
+
+<p>
+These algorithms are valid for all container types except
+the <em>random_shuffle</em> algorithm that requires random access iterators
+and so is valid for
+<ul>
+<li><em>vector</em>&lt;&gt;,</li>
+<li><em>deque</em>&lt;&gt; and</li>
+<li><em>C++ array</em></li>
+</ul>
+containers only.
+</p>
+
+<p>
+<em>Associative</em> containers may be used to provide <em>read-only</em> source ranges
+but these algorithms should not be used to modify such containers.
+</p>
+
+<p>
+Most of these algorithms operate on
+the objects in an <em>iterator</em> range &apos;[first,last)&apos;.
+One variant of the transform() operates on two source ranges.
+</p>
+
+<p>
+Many of these algorithms take a functor parameter:
+sometimes <em>optional</em>, sometimes not;
+either <em>unary</em> or <em>binary</em>;
+and not always a <em>predicate</em>.
+</p>
+
+<p>
+Many of the algorithms have variants that produce a result
+in a <em>destination</em> implied by a (third) iterator.
+</p><p>
+The destination may be in a container of a different <em>type</em>:
+it is assumed to be long enough to receive the result.
+</p><p>
+The destination may be in the <em>same</em> container as the source:
+the results are generally <em>undefined</em>
+if the source range overlaps the destination.
+</p>
+
+<p>
+Whenever there is a <em>destination</em>,
+the return value is an iterator &apos;ret_it&apos; and
+the result is given by &apos;[dest,ret_it)&apos;.
+</p>
+
+<p>
+The algorithms work without calling destructors or constructors.
+The implication is they work by copying values using <em>operator=</em>
+or exchanging them using <em>swap</em>().
+</p>
+
+<p>
+The <em>remove</em> and <em>unique</em> algorithms to not erase value-objects
+but overwrite them with copies of objects from further down the container.
+The return value is an iterator &apos;ret_it&apos; such that
+&apos;[first,ret_it)&apos; defines the 'wanted' result
+and &apos;[ret_it,last)&apos; defines value-objects of no further interest
+that may be erased using the container's erase() method.
+</p>
+
+
+<h3> The Algorithms </h3>
+
+<p>
+These algorithms do not operate on an <em>iterator</em> range:
+<ol><!-- Shuffle List --><li>
+<em>swap</em>(a_obj,b_obj) swaps two objects &apos;a_obj&apos; and &apos;b_obj&apos;.
+The objects need not be in a container.
+</li><li>
+<em>iter_swap</em>(a_it,b_it) swaps the objects pointed to by
+the iterators &apos;a_it&apos; and &apos;b_it&apos;.
+The objects need not be in the same container.
+</li></ol>
+</p>
+
+<p>
+Algorithms that modify the source iterator range are:
+<ol><!-- Shuffle List --><li>
+<em>random_shuffle</em>(first,last[,rng])
+rearranges value-objects in the range &apos;[first,last)&apos; in a random order
+optionally determined by calls to the random number generator &apos;rng&apos;.
+</li><li>
+<em>remove</em>(first,last,v_obj) removes value-objects that match &apos;v_obj&apos;.
+</li><li>
+<em>remove_if</em>(first,last,ufp) removes value-objects for which
+the unary predicate &apos;ufp&apos; return true.
+</li><li>
+<em>replace</em>(first,last,old,new) replaces value-objects that match &apos;old&apos;
+with copies of the object &apos;new&apos;.
+</li><li>
+<em>replace_if</em>(first,last,ufp,new) replaces value-objects for which
+the unary predicate &apos;ufp&apos; returns true.
+</li><li>
+<em>reverse</em>(first,last) reverses the order of value-objects in the range.
+</li><li>
+<em>rotate</em>(first,middle,last) rotates value-objects left
+so that &apos;middle&apos; becomes the first in the range.
+</li><li>
+<em>unique</em>(first,last[,bfp]) removes adjacent duplicate value-objects,
+optionally using the comparator &apos;bfp&apos; to define duplicate.
+</li></ol>
+</p>
+
+<p>
+The custom random number generator &apos;rng&apos; used by <em>random_shuffle</em>
+returns a result in the range &apos;[0,i)&apos;.
+</p>
+
+<p>
+Algorithms that modify the destination iterator range:
+<ol><!-- Shuffle List --><li>
+<em>copy</em>(first,last,dest) copies value-objects into
+the range &apos;[dest,...)&apos;.
+</li><li>
+<em>copy_backwards</em>(first,last,dest) copies value-objects into
+the range &apos;[...,dest)&apos;.
+</li><li>
+<em>remove_copy</em>(first,last,dest,v_obj) copies value-objects into
+the range &apos;[dest,...)&apos; removing those that match &apos;v_obj&apos;.
+</li><li>
+<em>remove_copy_if</em>(first,last,dest,ufp) copies value-objects into
+the range &apos;[dest,...)&apos; removing those
+for which the unary predicate &apos;ufp&apos; return true.
+</li><li>
+<em>replace_copy</em>(first,last,dest,old,new) copies value-objects into
+the range &apos;[dest,...)&apos; replacing those that match &apos;old&apos;
+with copies of &apos;new&apos;.
+</li><li>
+<em>replace_copy_if</em>(first,last,dest,ufp,new) copies value-objects into
+the range &apos;[dest,...)&apos; replacing those
+for which the unary predicate &apos;ufp&apos; returns true.
+</li><li>
+<em>reverse_copy</em>(first,last,dest) copies value-objects into
+the range &apos;[dest,...)&apos; but in reverse order.
+</li><li>
+<em>rotate_copy</em>(first,middle,last,dest) copies value-objects into
+the range &apos;[dest,...)&apos; but rotates them left
+so that &apos;middle&apos; is the first in the destination range.
+</li><li>
+<em>unique_copy</em>(first,last,dest[,bfp]) copies value-objects into
+the range &apos;[dest,...)&apos; removing  adjacent duplicate value-objects,
+optionally using the comparator &apos;bfp&apos; to define duplicate.
+</li></ol>
+</p>
+
+<p>
+Use <em>copy_backwards</em>() instead of <em>copy</em>()
+to copy objects within a container when the source range overlaps
+the destination range (and vice versa).
+</p>
+
+<p>
+The remaining algorithms are:
+<ol><!-- Shuffle List --><li>
+<em>fill</em>(first,last,v_obj) replaces value-objects in
+the range &apos;[first,last)&apos; with copies of &apos;v_obj&apos;.
+</li><li>
+<em>fill_n</em>(first,nn,v_obj) replaces value-objects
+in the range &apos;[first,first+nn)&apos; with copies of &apos;v_obj&apos;.
+</li><li>
+<em>generate</em>(first,last,gfp) replaces value-objects in
+the range &apos;[first,last)&apos; with objects produced by calls to
+the generator functor &apos;gfp&apos;.
+</li><li>
+<em>generate_n</em>(first,nn,gfp) replaces value-objects in
+the range &apos;[first,first+nn)&apos; with objects produced by calls to
+the generator functor &apos;gfp&apos;.
+</li><li>
+<em>swap_ranges</em>(first,last,dest) swaps value-objects in
+the range &apos;[first,last)&apos; with those in &apos;[dest,...)&apos;.
+</li><li>
+<em>transform</em>(first,last,dest,ufp) applies the unary functor &apos;ufp&apos;
+to each value-object and stores the result in &apos;[dest,...)&apos;.
+</li><li>
+<em>transform</em>(first,last,second,dest,bfp) applies the binary functor &apos;bfp&apos;
+to value-object pairs from the two source ranges
+and stores the result in &apos;[dest,...)&apos;.
+<br><br>
+</li></ol>
+</p>
+
+<p>
+The custom generator functor &apos;gfp&apos;
+used by the <em>generate</em> algorithms takes no parameter.
+</p>
+
+<p>
+The second form of the transform algorithm takes <em>two</em> source ranges.
+They need not contain objects of the <em>same</em> (base) type but
+the declaration of the <em>binary functor</em> must reflect this.
+</p>
+
+<p>
+Likewise, the <em>return</em> type of the functor used by
+either <em>transform</em> algorithm
+must reflect that of the <em>destination</em> range which need not be the same (base) type
+as the/either source range.
+</p>
