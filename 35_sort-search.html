@@ -1,0 +1,133 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Algorithms </h1>
+
+<h2> Sort and Search Algorithms </h2>
+
+
+<h3> General Remarks </h3>
+
+<p>
+The algorithms in this section either yield ordered ranges or operate on them.
+</p>
+
+<p>
+The <em>associative</em> containers are, by definition, <em>ordered</em>.
+They provide methods that are to be <em>preferred</em> over the algorithms considered here
+because they are faster.
+</p>
+
+<p>
+All but two of these algorithms may take an optional <em>comparator</em> (&apos;bfp&apos;).
+The exceptions are partition() and stable_partition() that require a <em>unary</em> predicate (&apos;ufp&apos;).
+</p><p>
+The comparator implements an <em>alternative</em> to the default sort order <em>less</em>&lt;&gt;.
+</p>
+
+<p>
+Some of these algorithms, as noted in the text, require random access iterators and so are valid for
+<ul>
+<li><em>vector</em>&lt;&gt;,</li>
+<li><em>deque</em>&lt;&gt; and</li>
+<li><em>C++ array</em></li>
+</ul>
+containers only.
+</p>
+
+<p>
+The search algorithms must use the same <em>comparator</em> as is/was used to <em>order</em> the container ranges.
+</p>
+
+
+<h3> The Algorithms </h3>
+
+<p>
+The sort/order algorithms are:
+<ol><!-- Shuffle List --><li>
+<em>sort</em>(first,last[,bfp])
+orders value-objects elements in the range '[first,last)'
+in ascending order.
+</li><li>
+<em>stable_sort</em>(first,last[,bfp])
+orders value-objects elements in the range '[first,last)'
+and preserves the relative order of equivalent objects.
+</li><li>
+<em>partition</em>(first,last,ufp)
+reorders value-objects in the range '[first,last) such that those for which
+the unary predicate &apos;ufp&apos; returns true
+are before those for which it returns false.
+</li><li>
+<em>stable_partition</em>(first,last,ufp)
+partitions the range '[first,last)
+and preserves the relative order of equivalent objects.
+</li><li>
+<em>nth_element</em>(first,nth,last[,bfp])
+partitions the range on '*nth' so that all value-objects in
+'[first,nth)' are less than or equal to those in '[nth,last)'.
+</li><li>
+<em>partial_sort</em>(first,middle,last[,bfp])
+partitions the range so that all value-objects in
+'[first,middle)' are less than or equal to '[middle,last)'
+and '[first,middle)' is ordered.
+</li><li>
+<em>partial_sort_copy</em>(first.last,start,end[,bfp])
+sorts and copies the range '[first,last)' into the range
+'[start,end)', which will usually be the shorter range.
+</li></ol>
+</p>
+
+<p>
+The partition() and stable_partition() algorithms return an iterator &apos;ret_it&apos; such that the <em>partitions</em> are
+given by: &apos;[first,ret_it)&apos; and &apos;[ret_it,last)&apos;.
+</p>
+
+<p>
+In the general case,
+nth_element() has <em>linear</em> complexity,
+sort() and stable_sort() have <em>linearithmic</em>, O(N log N), complexity
+and the partition algorithms have <em>logarithmic</em> complexity.
+However, worst case conditions may be worse.
+</p>
+
+<p>
+All but <em>partition</em>() and <em>stable_partition</em>() require random access iterators.
+For <em>partial_sort_copy</em>(), only the destination range '[start,end)' requires them.
+</p>
+
+<p>
+The search algorithms assume a sort range and have logarithmic complexity.
+<ol><!-- Shuffle List --><li>
+<em>lower_bound</em>(first,last,vobj[,bfp]) returns an iterator to the first object
+that does not compare less than &apos;vobj&apos;.
+It returns &apos;last&apos; if there is no such object.
+</li><li>
+<em>upper_bound</em>(first,last,vobj[,bfp]) returns an iterator to the first object
+that compares greater than &apos;vobj&apos;.
+It returns &apos;last&apos; if there is no such object.
+</li>
+<li>
+<em>equal_range</em>(first,last,vobj[,bfp]) returns a pair of iterators that bound
+the range of objects equal to &apos;vobj&apos;.
+If there are no such objects, the pair's first and second will be the same.
+</li>
+<li>
+<em>binary_search</em>(first,last,vobj[,bfp]) returns true
+if there is at least one object in the range equal to &apos;vobj&apos;.
+</li></ol>
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+The equal_range() algorithm yields a pair for which
+the first is as would be yielded by <em>lower_bound</em>() and
+the second is as would be yielded by <em>upper_bound</em>()
+but it may be faster.
+</p>
+<p>
+The binary_search() algorithm yields false when <em>equal_range</em>() would
+yield a pair with the pair&apos;s first and second equal but it may be faster.
+For <em>associative</em> containers, prefer &apos;find() != end()&apos; to binary_search().
+</p>
+
+<!-- Shuffle Off -->

@@ -26,5 +26,6 @@
 31_algorithms.html
 33_non-modifying.html
 34_modifying.html
+35_sort-search.html
 
 # EOF
