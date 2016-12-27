@@ -27,5 +27,6 @@
 33_non-modifying.html
 34_modifying.html
 35_sort-search.html
+36_merge-set.html
 
 # EOF

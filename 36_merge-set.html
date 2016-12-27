@@ -1,0 +1,81 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Algorithms </h1>
+
+<h2> Merge and Set Algorithms </h2>
+
+<h3> General Remarks </h3>
+
+<p>
+The algorithms in this section operate on two ordered ranges
+and, generally, yield a third.
+</p>
+
+<p>
+The third, <em>destination</em>, range
+is assumed to be in a container long enough to receive the result.
+The results are <em>undefined</em> if
+either source ranges overlaps the destination.
+</p>
+<p>
+For <em>equivalent</em> value-objects, <em>relative</em> order is preserved
+and those from the first source range appear <em>before</em> those from the second.
+</p>
+
+<p>
+All these algorithms may take an optional <em>comparator</em> (&apos;bfp&apos;) that
+implements an <em>alternative</em> to the default sort order <em>less</em>&lt;&gt;.
+</p>
+
+<p>
+The algorithms are valid for <em>all</em> container types.
+The results are <em>undefined</em> if the source ranges are not ordered
+or are/were ordered using a different (optional) <em>comparator</em>.
+</p>
+
+<p>
+Except for <em>includes</em>(),
+their <em>return value</em> is an iterator &apos;ret_value&apos; such that the result is given by &apos;[dest,ret_val)&apos;
+</p>
+
+
+<h3> The Algorithms </h3>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>merge</em>(first,last,start,end,dest[,bfp]) merges value-objects from the ranges &apos;[first,last)&apos; and &apos;[start,end)&apos; into the range &apos;[dest,...)&apos;.
+</li><li>
+<em>inplace_merge</em>(first,middle,last[,bfp]) merges value-objects from two consecutive ranges, &apos;[first,middle)&apos; and &apos;[middle,last)&apos;, within the same container.
+</li><li>
+<em>set_union</em>(first,last,start,end,dest[,bfp]) generates the union of &apos;[first,last)&apos; and &apos;[start,end)&apos; in the range &apos;[dest,...)&apos;.
+</li><li>
+<em>set_intersection</em>(first,last,start,end,dest[,bfp]) generates the intersection of &apos;[first,last)&apos; and &apos;[start,end)&apos; in the range &apos;[dest,...)&apos;.
+</li><li>
+<em>set_symmetric_difference</em>(first,last,start,end,dest[,bfp]) generates the symmetric difference of &apos;[first,last)&apos; and &apos;[start,end)&apos; in the range &apos;[dest,...)&apos;.
+</li><li>
+<em>set_difference</em>(first,last,start,end,dest[,bfp]) generates the difference between &apos;[first,last)&apos; and &apos;[start,end)&apos; in the range &apos;[dest,...)&apos;.
+</li><li>
+<em>includes</em>(first,last,start,end[,bfp]) returns true if every value-object in &apos;[start,end)&apos; exists in &apos;[first,last)&apos;, including duplicates.
+</li></ol>
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+For <em>set_union</em>() for value-objects that occur in both ranges, only those in first range are copied.
+Excess duplicates from either range are copied.
+</p>
+<p>
+For <em>set_intersection</em>() value-objects that occur in both ranges are copied.
+Excess duplicates from neither range are copied.
+</p>
+<p>
+For <em>set_symmetric_difference</em>() value-objects that occur in either range but not both ranges are copied.
+Excess duplicates from either range are copied.
+</p>
+<p>
+For <em>set_difference</em>(), only value-objects in the first range that do not occur in second are copied.
+Excess duplicates are copied.
+</p>
+
+<!-- Shuffle Off -->
