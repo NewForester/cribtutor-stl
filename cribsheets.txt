@@ -28,5 +28,6 @@
 34_modifying.html
 35_sort-search.html
 36_merge-set.html
+37_other.html
 
 # EOF
