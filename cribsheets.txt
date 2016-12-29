@@ -30,4 +30,8 @@
 36_merge-set.html
 37_other.html
 
+# Ancilliary Components
+
+4_iterators.html
+
 # EOF

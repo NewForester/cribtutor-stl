@@ -1,0 +1,238 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Iterators </h1>
+
+<p>
+Iterators allow the objects within containers to be accessed.
+</p>
+
+
+<h2> Introduction </h2>
+
+<p>
+Iterators behave a lot like <em>pointers</em>.
+They can be <em>dereferenced</em> and, depending on category, <em>incremented</em> and <em>decremented</em>.
+</p><p>
+Like pointers, they are potentially <em>unsafe</em>.
+In addition to the usual pointer <em>caveats</em>, inserting and erasing objects from a container may invalidate <em>all</em> iterators for the container.
+</p>
+
+<p>
+Iterators are defined in the &lt;<em>iterator</em>&gt; header file but there is seldom a need to include this explicitly.
+</p>
+
+
+<h2> Iterator Categories </h2>
+
+<p>
+Every container, regardless of its type, can be accessed using iterators but
+iterators are defined by behaviour, not type.
+</p><p>
+There are five categories of iterators based on behaviour:
+<ul>
+<li><em>input</em>,</li>
+<li><em>output</em>,</li>
+<li><em>forward</em>,</li>
+<li><em>bi-directional</em> and </li>
+<li><em>random access</em>.</li>
+</ul>
+</p>
+
+<p>
+All iterators can be <em>dereferenced</em> and <em>incremented</em>.
+</p>
+
+<p>
+Input iterators allow a sequence to be read in one pass.
+They can be dereferenced once as an <em>rvalue</em> and compared for <em>equality/inequality</em>.
+</p>
+
+<p>
+Output iterators allow a sequence to be written in one pass.
+They can be dereferenced once as an <em>lvalue</em>.
+</p>
+
+<p>
+Forward iterators can be used anywhere input or output iterators can be.
+They can also be dereferenced more than <em>once</em>
+and support all <em>relational</em> operators.
+</p>
+
+<p>
+Bi-directional iterators can be used anywhere forward iterators can be.
+They can also be <em>decremented</em>.
+</p>
+
+<p>
+Random access iterators can be used anywhere bi-directional iterators can be.
+They also support <em>indexing</em> and <em>pointer arithmetic</em>.
+</p>
+
+<p>
+Ordinary <em>pointers</em> may be used as random access iterators.
+</p>
+
+<h2> Container Methods Types </h2>
+
+<p>
+Changes in C++ 11 affect the assertions in this section.
+</p>
+
+<p>
+Each container type has four member types for iterators:
+<ul>
+<li><em>iterator</em>,</li>
+<li><em>reverse_iterator</em>,</li>
+<li><em>const_iterator</em> and </li>
+<li><em>const_reverse_iterator</em>.</li>
+</ul>
+</p>
+
+<p>
+A ordinary <em>iterator</em> may be used to 'walk' a container from beginning to end;
+a <em>reverse iterator</em> to 'walk' from the end to the beginning.
+</p>
+
+<p>
+The <em>const</em> iterator variants are returned for constant containers.
+They deference to yield constant <em>value-objects</em> that cannot be modified.
+</p><p>
+They also cannot be used with some container operations,
+such as <em>insert</em> and <em>erase</em>.
+</p><p>
+A non-const iterator variant may be <em>converted</em> implicitly to const variant
+but not <em>vice versa</em>.
+This may give compiler errors when comparing iterators:
+try re-ordering the comparison.
+</p>
+
+<p>
+The <em>reverse</em> iterator variants require at least <em>bi-directional</em> behaviour.
+Their implementation overloads the ordinary iterator class to give correct semantics.
+</p><p>
+However, they have type issues compounded by the fact that, logically,
+a reverse iterator points not &apos;at&apos; but &apos;before&apos; the value-object.
+</p><p>
+To convert a <em>reverse</em> iterator for use with erase or comparison with an <em>ordinary</em> iterator
+use &apos;(++r_iter).<em>base</em>()&apos;.
+</p>
+
+
+<h2> Container Methods </h2>
+
+<p>
+Each container type has four member functions that return an iterator.
+<ol><!-- Shuffle List --><li>
+<em>begin</em>() points to the first object in a container
+and is typically used to initialise iterators.
+</li><li>
+<em>rbegin</em>() points to the last object in a container
+and is typically used to initialise reverse iterators.
+</li><li>
+<em>end</em>() points one beyond the last in the container
+and is typically used to determine when to stop 'iterating'.
+</li><li>
+<em>rend</em>() points one before the first in the container
+and is typically used to determine when to stop 'reverse iterating'.
+</li></ol>
+</p>
+
+
+<h2> Insertion Iterators </h2>
+
+<p>
+An insertion iterator is a special kind of <em>output</em> iterator.
+Assignment syntax has insertion semantics and increment syntax is a no-op.
+</p>
+
+<p>
+For example:
+<pre>
+    set &lt;int&gt;       data;
+    insert_iterator&lt; set &lt;int&gt; >    it(data);
+
+    *it = 20;
+    *it = 10;
+
+    *it++ = 200;
+    *it++ = 100;
+</pre>
+inserts four values into the set.
+</p>
+
+<p>
+These are particularly useful with algorithms as the <em>destination</em> parameter
+since the destination grows as necessary and <em>overflow</em> is not possible.
+<pre>
+    dst.clear();
+    insert_iterator &lt; list &lt;int&gt; &gt; insert_it(dst,dst.begin());
+
+    copy (src.begin(),src.end(),insert_it);
+</pre>
+</p>
+
+<p>
+There are three insertion iterators:
+<ol>
+<li>back_iterator requires the container implement <em>push_back</em>(v_obj)</li>
+<li>front_iterator requires the container implement <em>push_front</em>(v_obj)</li>
+<li>iterator requires the container implement <em>insert</em>(it,v_obj)</li>
+</ol>
+Since the insert(it,v_obj) semantics are 'insert before it',
+the correct result is achieved for sequence containers only when increment is a no-op.
+</p>
+
+<p>
+Three <em>function</em> templates are provided for convenience:
+back_inserter&lt;&gt;, front_inserter&lt;&gt; and inserter&lt;&gt;:
+<pre>
+    dst.clear();
+    copy (src.begin(),src.end(),back_inserter(dst));
+</pre>
+</p>
+
+
+<h2> Function Templates </h2>
+
+<p>
+There are three function templates for insertion iterators and two others.
+</p>
+
+<p>
+The other two function templates will work for iterators that do not support pointer arithmetic
+but are optimised for <em>random access</em> iterators.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>advance</em>(it,nn) returns (logically) &apos;it + nn&apos;;
+&apos;nn&apos; may be negative for bi-directional iterators.
+</li><li>
+<em>distance</em>(it1,it2) returns (logically) &apos;it2 - it1&apos;.
+</li></ol>
+</p>
+
+<p>
+The results for distance() are <em>undefined</em> if the iterators do not refer to
+the same container or if it2 is 'less than' it1.
+An infinite loop may result.
+</p>
+
+
+<h2> Advanced Iterator Topics </h2>
+
+<p>
+The class template <em>iterator_traits</em> provides compile time information about an iterator through a number of typedefs.
+It can be used to answer question such as "Is this iterator bi-directional ?"
+</p>
+
+<p>
+<em>Input/output stream</em> iterators are specialisations of input/output iterators
+that allow streams to the treated as sequences of value-objects.
+</p>
+
+<p>
+<em>Raw memory</em> iterators are a specialisation of output iterators
+that allow a sequence of value-objects to be written to allocated but uninitialised memory.
+These are declared in the &lt;memory&gt; header file.
+</p>
