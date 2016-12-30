@@ -33,5 +33,6 @@
 # Ancilliary Components
 
 4_iterators.html
+5_functors.html
 
 # EOF

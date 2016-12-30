@@ -1,0 +1,316 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Functors </h1>
+
+<p>
+Function objects (aka functors) are objects that implement operator() so they can be called as if they were a function.
+</p>
+
+
+<h2> Function Object Examples </h2>
+
+<p>
+The simplest example may be:
+<pre>
+    // plain unary function
+
+    void print (const int&amp; value)
+    {
+        cout &lt;&lt; value &lt;&lt; " ";
+    }
+
+    // unary functor
+
+    struct Print
+    {
+        void operator() (const int&amp; value)
+        {
+            cout &lt;&lt; value &lt;&lt; " ";
+        }
+    };
+</pre>
+</p><p>
+The <em>STL</em> documentation claims you can use either but functors seem to be more convenient.
+There are wrappers to convert functions to functors.
+</p>
+
+<p>
+In practice, function objects are often generalised using <em>templates</em>:
+<pre>
+    // plain unary function
+
+    template &lt;typename T&gt;
+    void print (const T&amp; value)
+    {
+        cout &lt;&lt; value &lt;&lt; " ";
+    }
+
+    // unary functor
+
+    template &lt;typename T&gt;
+    struct Print
+    {
+        void operator() (const T&amp; value) const
+        {
+            cout &lt;&lt; value &lt;&lt; " ";
+        }
+    };
+</pre>
+</p>
+
+<p>
+A unary function/functor takes <em>one</em> parameter.
+A unary <em>predicate</em> is a unary function/functor that returns <em>bool</em>.
+<pre>
+    // unary function
+
+    bool odd (const int&amp; value)
+    {
+        return (value % 2 != 0);
+    }
+
+    // unary functor
+
+    struct Even
+    {
+        bool operator() (const int&amp; value) const
+        {
+            return (value % 2 == 0);
+        }
+    };
+</pre>
+</p>
+
+<p>
+A binary function/functor takes <em>two</em> parameters.
+A binary predicate or <em>comparator</em> is a binary function/functor that returns <em>bool</em>.
+<pre>
+    // binary function
+
+    bool compare (const char&amp; lhs, const char&amp; rhs)
+    {
+        return (tolower(lhs) == tolower(rhs));
+    }
+
+    // binary functor or comparator
+
+    struct Compare
+    {
+        bool operator() (const char&amp; lhs, const char&amp; rhs) const
+        {
+            return (tolower(lhs) == tolower(rhs));
+        }
+    };
+</pre>
+</p>
+
+<p>
+Functors can also carry <em>state</em>, which can be very useful.
+<pre>
+    // case insensitive find
+
+    struct Find
+    {
+        char findThis;
+
+        Find(const char&amp; letter) : findThis (toupper(letter)) {}
+
+        bool operator() (const char&amp; letter)
+        {
+            return (toupper(letter) == findThis);
+        }
+    };
+
+    // example of use
+
+    count_if(aList.begin(), aList.end(), Find('a'));
+</pre>
+</p>
+
+<h2> STL Functors </h2>
+
+<p>
+The STL provides support for functors in the &lt;<em>functional</em>&gt; header file.
+</p>
+
+<p>
+In this header file are defined two base types for a large number of functor templates that wrap <em>C++ operators</em>.
+These templates generally have a <em>single</em> template parameter except where the operation is a predicate.
+</p><p>
+To <em>instantiate</em> these functors you need to <em>resolve</em> their template parameters.
+However, since they are template classes, you can declare variables with them:
+<pre>
+    equal_to &lt;int&gt; eq;
+
+    if (eq(a,b))
+        break;
+</pre>
+</p>
+
+<p>
+In the header file are also defined <em>binders</em> and <em>adaptors</em> that generate functors.
+These generally <em>instantiate</em> without resolving their template parameters.
+Most (and their base types) seem to be deprecated in C++ 11.
+</p>
+
+<h2> Base Classes </h2>
+
+<p>
+There are two base classes from which all STL functors are derived and on which the binders and adaptors depend:
+<ol>
+<!-- Shuffle List -->
+<li><em>unary_function</em>&lt;&gt;  takes one argument</li>
+<li><em>binary_function</em>&lt;&gt; takes two arguments</li>
+</ol>
+</p>
+
+<p>
+Their template definitions allow for the parameters and the result to be of different <em>types</em>:
+<pre>
+    template &lt;typename Arg, typename Result&gt;
+        struct unary_function;
+
+    template &lt;typename Arg1, typename Arg2, typename Result&gt;
+        struct binary_function;
+</pre>
+although STL functors themselves are more <em>restricted</em>.
+</p>
+
+<p>
+The <em>Boost</em> library extends functors to three or more arguments.
+</p>
+
+<h2> Arithmetic and Bitwise Functors </h2>
+
+<p>
+The arithmetic functors are:
+<ol>
+<!-- Shuffle List -->
+<li><em>plus</em>&lt;&gt;       (wraps operator+)</li>
+<li><em>minus</em>&lt;&gt;      (wraps operator-)</li>
+<li><em>multiplies</em>&lt;&gt; (wraps operator*)</li>
+<li><em>divides</em>&lt;&gt;    (wraps operator/)</li>
+<li><em>modulus</em>&lt;&gt;    (wraps operator%)</li>
+<li><em>negate</em>&lt;&gt;     (wraps unary operator-)</li>
+</ol>
+</p>
+
+<p>
+The arithmetic functors are commonly used with the <em>transform</em>() algorithm:
+<pre>
+    transform(l1.begin(), l1.end(), l2.begin(), l3.begin(), plus&lt;int&gt;());
+</pre>
+</p>
+
+<p>
+There are also wrappers for bit-wise operators (C++ 11 and later ?):
+<ul>
+<li><em>bit_and</em>&lt;&gt;,</li>
+<li><em>bit_or</em>&lt;&gt; and</li>
+<li><em>bit_xor</em>&lt;&gt;.</li>
+</ul>
+There do not appear to be wrappers for shift operators.
+</p>
+
+<h2> Comparison and Logical Functors </h2>
+
+<p>
+The wrappers for comparison operators all return bool:
+<ol>
+<!-- Shuffle List -->
+<li><em>less</em>&lt;&gt;          (wraps operator&lt;)</li>
+<li><em>less_equal</em>&lt;&gt;    (wraps operator&lt;=)</li>
+<li><em>equal_to</em>&lt;&gt;      (wraps operator=)</li>
+<li><em>greater_equal</em>&lt;&gt; (wraps operator&gt;=)</li>
+<li><em>greater</em>&lt;&gt;       (wraps operator&gt;)</li>
+<li><em>not_equal_to</em>&lt;&gt;  (wraps operator!=)</li>
+</ol>
+</p>
+
+<p>
+The comparison functors are commonly used to sort/order value-objects within <em>containers</em>:
+<pre>
+    sort(v1.begin(), v1.end(), greater&lt;int&gt;());
+</pre>
+</p>
+
+<p>
+There are two logical negation predicates that work with both functors and functions:
+<ol>
+<!-- Shuffle List -->
+<li><em>not1</em> for unary predicates</li>
+<li><em>not2</em> for binary predicates</li>
+</ol>
+</p>
+
+<p>
+There are also wrappers for logical operators, which all return bool:
+<ol>
+<!-- Shuffle List -->
+<li><em>logical_and</em>&lt;&gt; (and - both operands always evaluated)</li>
+<li><em>logical_or</em>&lt;&gt;  (or - both operands always evaluated)</li>
+<li><em>logical_not</em>&lt;&gt; (unary functor)</li>
+</ol>
+</p>
+
+<h2> Binders </h2>
+
+<p>
+Binders are used to bind a value-object to one or other parameter of a binary functor
+so converting it to a unary functor.
+There are two:
+<ol>
+<!-- Shuffle List -->
+<li><em>bind1st</em>&lt;&gt; to bind the first parameter</li>
+<li><em>bind2nd</em>&lt;&gt; to bind the second parameter</li>
+</ol>
+</p>
+
+<p>
+Binders are commonly used for threshold <em>comparisons</em>:
+<pre>
+    transform(l1.begin(), l1.end(), l2.begin(), bind1st(greater_equal&lt;int&gt;(), 10) );
+    transform(l1.begin(), l1.end(), l2.begin(), bind2nd(less&lt;int&gt;(), 10) );
+</pre>
+</p>
+
+<p>
+Binders may be used with application specific functors
+but such functors must declare their operator() <em>const</em>
+and their parameters must be passed by <em>value</em>
+or be <em>const</em> references.
+</p>
+
+<h2> Adaptors </h2>
+
+<p>
+Adaptors allow functions to be recast as a functors:
+<ol>
+<!-- Shuffle List -->
+<li><em>ptr_fun</em>&lt;&gt; takes a non-member or static member function and returns a functor</li>
+<li><em>mem_fun</em>&lt;&gt; takes a (non-static) class member and returns a functor that takes an object pointer</li>
+<li><em>mem_fun_ref</em>&lt;&gt; takes a (non-static) class member and returns a functor that takes an object reference</li>
+</ol>
+</p><p>
+The first parameter to functors that call a (non-static) class member represents the object.
+Thus the class member can take only <em>0</em> or <em>1</em> parameters.
+</p><p>
+Use mem_fun&lt;&gt; when the container contains <em>pointers</em> and
+mem_fun_ref&lt;&gt; when the container contains <em>objects</em>.
+<pre>
+    vector &lt;string*&gt; numbers;
+    transform (numbers.begin(), numbers.end(), lengths.begin(), mem_fun(&amp;string::length));
+
+    vector &lt;string&gt; numbers;
+    transform (numbers.begin(), numbers.end(), lengths.begin(), mem_fun_ref(&amp;string::length));
+</pre>
+</p>
+
+<p>
+Adaptors allow <em>functions</em> to be used with <em>binders</em>:
+<pre>
+    int add(int a, int b);
+
+    transform(l1.begin(), l1.end(), l2.begin(), bind2nd(ptr_fun(add), 10);
+</pre>
+</p>
