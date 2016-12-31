@@ -1,0 +1,114 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Streams </h1>
+
+<p>
+STL streams provide C++ with the input/output operations to/from
+<ul>
+<li>console,</li>
+<li>files and</li>
+<li>strings.</li>
+</ul>
+</p>
+
+
+<h2> Introduction </h2>
+
+<p>
+The STL provides input and output via streams.
+A stream is a channel through which data is transmitted.
+</p>
+
+<p>
+One end is attached to the <em>program</em> which can read and/or write to the stream
+and the other end to a <em>device</em>, a <em>file</em> or a string <em>buffer</em>.
+</p>
+<p>
+For an <em>input</em> device such as a keyboard, the stream is attached to its <em>source</em>.
+For an <em>output</em> device such as a display, the stream is bound to its <em>destination</em>.
+</p>
+<p>
+Typically, at the lowest level, a stream deals with <em>characters</em> but at the highest level it deals with <em>C++ values</em>.
+It converts between them.
+</p>
+
+<p>
+There are three standard streams available to all programs:  <em>cin</em>, <em>cout</em> and <em>cerr</em>.
+</p>
+<p>
+There is also <em>clog</em>, which is a buffered version of <em>cerr</em>.
+There are wide character versions of all four.
+</p>
+
+<p>
+Presumably, stream i/o could be used with any character or block device but how
+a stream is associated with an arbitrary device is an advanced topic.
+</p>
+
+
+<h3> The STL input/output library </h3>
+
+The STL input/output library has a class hierarchy split over a number of header files.
+
+<p>
+For i/o streams there are three header files:
+<ol><!-- Shuffle List -->
+<li>&lt;<em>istream</em>&gt;    – for input streams</li>
+<li>&lt;<em>ostream</em>&gt;    – for output streams</li>
+<li>&lt;<em>iostream</em>&gt;   – for input and output streams</li>
+</ol>
+The last effectively combines the first two.
+</p>
+<p>
+For file and string streams there are two header files:
+<ol><!-- Shuffle List -->
+<li>&lt;<em>fstream</em>&gt;    – for file streams</li>
+<li>&lt;<em>sstream</em>&gt;    – for string streams</li>
+</ol>
+</p>
+<p>
+There are two other header files of interest:
+<ol><!-- Shuffle List -->
+<li>&lt;<em>ios</em>&gt;        – for stream flags and such</li>
+<li>&lt;<em>iomanip</em>&gt;    – for stream manipulators</li>
+</ol>
+</p>
+<p>
+There are three classes for i/o streams:
+<ol><!-- Shuffle List -->
+<li><em>istream</em>    – for input (provides extraction operators)</li>
+<li><em>ostream</em>    – for output (provides insertion operators)</li>
+<li><em>iostream</em>   – combines istream and ostream</li>
+</ol>
+</p>
+<p>
+There are three classes for file streams that inherit from the i/o stream classes:
+<ol><!-- Shuffle List -->
+<li><em>ifstream</em>   – for input from files</li>
+<li><em>ofstream</em>   – for output to files</li>
+<li><em>fstream</em>    – for file input and output</li>
+</ol>
+</p>
+<p>
+There are three classes for string streams that inherit from the i/o stream classes:
+<ol><!-- Shuffle List -->
+<li><em>istringstream</em>   – for extraction from strings</li>
+<li><em>ostringstream</em>   – for insertion into strings</li>
+<li><em>stringstream</em>    – effectively combines the other two</li>
+</ol>
+</p>
+
+<p>
+All methods and operators are in the <em>std</em> namespace.
+</p>
+<p>
+Underneath are the classes <em>ios</em> and <em>ios_base</em>
+that provide definitions for stream and formatting state flags, file open modes and other constants.
+Many of their members (such as ios::failure and ios_base::failure) are interchangeable.
+</p>
+<p>
+The provision of these definitions and the methods that rely on them at the lowest level
+means everything is available when you need it but also provides scope for some confusion.
+It is possible to open an ifstream for output although this serves no purpose.
+The seekg() methods is available for ostream objects but, again, is of no practical use.
+</p>

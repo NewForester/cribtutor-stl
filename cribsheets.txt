@@ -35,4 +35,8 @@
 4_iterators.html
 5_functors.html
 
+# Streams
+
+61_streams.html
+
 # EOF
