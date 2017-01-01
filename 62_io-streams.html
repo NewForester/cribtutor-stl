@@ -1,0 +1,392 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Streams </h1>
+
+<h2> Input/Output Streams </h2>
+
+<p>
+Input/output streams provide for formatted input and output of text.
+</p>
+
+<p>
+The two streams used most often are <em>cout</em>, for output to display devices and <em>cin</em> for input from keyboard devices.
+</p>
+<p>
+Input/output streams are implemented by the classes istream, ostream and iostream in the header files
+&lt;<em>istream</em>&gt;, &lt;<em>ostream</em>&gt; and &lt;<em>iostream</em>&gt;.
+</p>
+<p>
+The class <em>iostream</em> combines <em>istream</em> and <em>ostream</em>.
+</p>
+
+<h3> Stream Insertion </h3>
+
+<p>
+Formatted stream output is provided by the class ostream in the header file &lt;ostream&gt;.
+</p>
+<p>
+The <em>insertion operator</em>(&lt;&lt;) is overloaded for each built-in <em>C++</em> type.
+</p>
+
+<p>
+Member functions overload the numeric types while global functions overload character and character string types.
+The generic signature for ostream member functions is:
+<pre>
+    ostream&amp;    operator&lt;&lt; (T val);
+</pre>
+and for global functions is:
+<pre>
+    ostream&amp;    operator&lt;&lt; (ostream&amp; out, T val);
+</pre>
+Their use is the <em>same</em>.
+</p>
+
+<p>
+The return value is a <em>reference</em> to the stream allowing calls to be chained together in the same <em>C++ expression</em> (aka <em>in-line</em> use).
+</p>
+
+<p>
+The <em>string</em> class also provides operator&lt;&lt; as may other standard C++ classes.
+<em>Overloading</em> operator&lt;&lt; for application specific classes is common.
+The operator is often a <em>friend</em> function.
+<pre>
+    class myClass
+    {
+        friend      ostream&amp;    operator&lt;&lt; (ostream&amp;, const myClass&amp;);
+
+        public:     int         getValue () const;
+
+        private:    int         getState () const;
+    };
+
+    ostream&amp;    operator&lt;&lt; (ostream&amp; os, const myClass&amp; obj)
+    {
+        return (os &lt;&lt; &apos;(&apos; &lt;&lt; obj.getValue() &lt;&lt; &quot;; &quot; &lt;&lt; obj.getState() &lt;&lt; &apos;)&apos;);
+    }
+</pre>
+</p>
+
+<p>
+In case of an <em>irrecoverable</em> error, the ios::badbit flag is set.
+</p>
+
+
+<h3> Stream Extraction </h3>
+
+<p>
+Formatted stream input is provided by the class istream in the header file &lt;istream&gt;.
+</p>
+<p>
+The <em>extraction operator</em>(&gt;&gt;) is overloaded for each built-in <em>C++</em> type.
+</p>
+
+<p>
+Member functions overload the numeric types while global functions overload character and character string types.
+The generic signature for istream member functions is:
+<pre>
+    istream&amp;    operator&gt;&gt; (T&amp; val);
+</pre>
+and for global functions is:
+<pre>
+    istream&amp;    operator&gt;&gt; (istream&amp; out, T&amp; val);
+</pre>
+Their use is the <em>same</em>.
+</p>
+
+<p>
+The return value is a <em>reference</em> to the stream allowing calls to be chained together in the same <em>C++ expression</em> (aka <em>in-line</em> use).
+</p>
+<p>
+The <em>string</em> class also provides operator&lt;&lt; as may other standard C++ classes.
+<em>Overloading</em> operator&lt;&lt; for application specific classes is less common.
+The operator is often a <em>friend</em> function.
+<pre>
+    class myClass
+    {
+        friend      istream&amp;    operator&gt;&gt; (istream&amp;, myClass&amp;);
+
+        private:    int         value;
+
+        private:    int         state;
+    };
+
+    istream&amp;    operator&gt;&gt; (istream&amp; is, myClass&amp; obj)
+    {
+        return (is &gt;&gt; obj.value &gt;&gt; obj.state);
+    }
+</pre>
+</p>
+
+<p>
+Leading <em>white space</em> is (by default) skipped before <em>extraction</em>.
+Extraction <em>stops</em> when white space (or end of file) is encountered.
+</p>
+<p>
+In case of a <em>recoverable</em> error such as invalid character preventing extraction, the ios:failbit flag is set.
+</p>
+<p>
+In case of an <em>irrecoverable</em> error, the ios::badbit flag is set.
+</p>
+<p>
+For <em>C-style</em> character strings, a terminating null character is added to the result
+and <em>width</em>() may be used to avoid buffer overflow.
+You cannot read through <em>white space</em>: use getline() instead.
+</p>
+
+
+<h3> Formatting </h3>
+
+<p>
+There are three settings and a large number of flags that may be used to control insertion or extraction.
+Most affect insertion.
+</p>
+
+<!--- Shuffle On --->
+
+<p>
+The <em>width</em> setting specifies a minimum width for insertion and maximum width for extraction operations.
+The setting only affects the next operation:  the previous value is automatically restored.
+The default of 0 means no limit.
+</p>
+
+<p>
+The <em>fill</em> character is used to pad to an output stream&apos;s width setting when a formatted value is not wide enough.
+The initial, default, value is space.
+How it used depends on the ios::<em>adjustfield</em>; group flags.
+</p>
+
+<p>
+The <em>precision</em> affects the number of digits inserted for floating point values.
+The initial, default value is 6.
+How it is used depends on the ios::<em>floatfield</em> group flags.
+</p>
+
+<!--- Shuffle Off --->
+
+<p>
+These settings and all the state flags may be read and set using:
+<ol><!-- Shuffle List -->
+<li>formatting <em>methods</em> that are <em>not</em> suitable for in-line use</li>
+<li>formatting <em>manipulators</em> that are suitable for in-line use</li>
+</ol>
+</p>
+
+
+<h3> Formatting State Flags </h3>
+
+<p>
+Most formatting state flags affect insertion but some affect extraction.
+</p>
+
+<p>
+The following are independent, single bit, flags:
+<ol><!-- Shuffle List -->
+<li>ios::<em>boolalpha</em>     – read/write bool values as alphabetic strings</li>
+<li>ios::<em>shopoint</em>      – always insert floating point values with a decimal point and trailing zeros</li>
+<li>ios::<em>showbase</em>      – insert integral values with a number base prefix</li>
+<li>ios::<em>showpos</em>       – insert non–negative numeric values with a leading +</li>
+<li>ios::<em>skipws</em>        – skip white space on extraction operations</li>
+<li>ios::<em>unitbuf</em>       – flush output after each insertion</li>
+<li>ios::<em>uppercase</em>     – use 0X as the number base prefix for hexadecimal format</li>
+</ol>
+</p>
+
+<!-- Shuffle On -->
+<p>
+Two (
+<ul>
+<li>ios::<em>skipws</em> and</li>
+<li>ios::<em>uppercase</em></li>
+</ul>
+) are true by default; the others false.
+</p>
+<p>
+When ios::base is ios::<em>oct</em>, ios::<em>showbase</em> will insert a leading 0.
+</p>
+<p>
+When ios::base is ios::<em>hex</em>, ios::<em>showbase</em> will insert a leading 0x
+if ios::<em>uppercase</em> is false, 0X otherwise.
+</p>
+<p>
+When ios::<em>boolalpha</em> is true, &apos;true&apos; and &apos;false&apos; will be printed instead of &apos;0&apos; and &apos;1&apos;.
+Extraction has complementary expectations.
+</p>
+<!-- Shuffle Off -->
+
+<p>
+The ios::<em>basefield</em> group flags affect insertion and extraction and determine how integral values are formatted:
+<ol><!-- Shuffle List -->
+<li>ios::<em>dec</em>           – use decimal format (default)</li>
+<li>ios::<em>hex</em>           – use hexadecimal format</li>
+<li>ios::<em>oct</em>           – use octal format</li>
+</ol>
+For input, integral values are interpreted as being in decimal, octal or hexadecimal regardless of the presence of a leading 0.
+</p>
+
+<p>
+The ios::<em>floatfield</em> group flags affect insertion only and determine how floating point values are formatted:
+<ol><!-- Shuffle List -->
+<li>ios::<em>fixed</em>         – use fixed point notation (without exponent)</li>
+<li>ios::<em>scientific</em>    – use scientific notation (with exponent)</li>
+</ol>
+</p>
+<p>
+The effect of the precision setting depends on the ios::floatfield flags.
+For ios::<em>fixed</em>, precision() digits are inserted after the decimal point, including trailing 0s.
+For ios::<em>scientific</em>, one digit is inserted before the decimal point and the exponent is chosen accordingly.
+</p>
+<p>
+If neither is specified (default),
+the precision() indicates the total number of digits before and after the decimal point.
+There are no trailing 0s and <em>scientific</em> format is used if the would be exponent is less than -4 or greater than the current precision().
+</p>
+
+<p>
+The ios::<em>adjustfield</em> group flags affect insertion only and determine where the fill character is inserted:
+<ol><!-- Shuffle List -->
+<li>ios::<em>left</em>          – pad by appending fill characters to the end</li>
+<li>ios::<em>right</em>         – pad by inserting fill characters at the beginning (default)</li>
+<li>ios::<em>internal</em>      – pad by inserting fill characters at a specified internal point</li>
+</ol>
+</p>
+<p>
+For ios::<em>internal</em>, the fill character is inserted between the sign or number base prefix and the value.
+</p>
+
+
+<h3> Formatting Methods </h3>
+
+<p>
+These may be used to control insertion or extraction but they cannot be used in-line.
+All methods that set/change a setting return the previous setting.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>width</em>() gets the stream&apos;s current width setting.
+</li><li>
+<em>width</em>(nn) sets the width for the next operation and returns the previous setting.
+</li>
+<li>
+<em>fill</em>() gets the stream&apos;s current fill character.
+</li><li>
+<em>fill</em>(cc) sets the stream&apos;s fill character and returns the previous setting.
+</li>
+<li>
+<em>precision</em>() returns the stream&apos;s current precision setting.
+</li><li>
+<em>precision</em>(nn) sets the stream&apos;s precision setting and returns its previous setting.
+</li>
+<li>
+<em>flags</em>() gets the complete set of flags.
+</li><li>
+<em>flags</em>(flags) sets the complete set of flags.
+</li>
+<li>
+<em>setf</em>(flags) sets the given flags.
+</li><li>
+<em>unsetf</em>(flags) resets the given flags.
+</li>
+<li>
+<em>setf</em>(flags,group) sets the given flags under the &apos;group&apos; mask.
+</li></ol>
+</p>
+
+
+<h3> Formatting Manipulators </h3>
+
+<p>
+Manipulators are an alternative way of altering formatting behaviour that may be used in-line.
+</p>
+
+<p>
+Manipulators are defined in the &lt;<em>iomanip</em>&gt; header file.
+</p>
+<p>
+<pre>
+    // examples using methods/flags:
+
+    cout.width(3); cout &lt;&lt; 1 &lt;&lt; endl;
+
+    cout.setf(ios::boolalpha); cout &lt;&lt; (bool) 1 &lt;&lt; endl;
+
+    // examples using manipulators
+
+    cout &lt;&lt; setw(3) &lt;&lt; 1 &lt;&lt; endl;
+
+    cout &lt;&lt; boolalpha &lt;&lt; (bool) 1 &lt;&lt; endl;
+</pre>
+</p>
+
+<p>
+For the majority of manipulators that, as methods, take no parameter, <em>parentheses</em> should not be used in expressions.
+For each independent state flag there are two manipulators, one to set and one to reset.
+</p>
+
+<!--- Shuffle On --->
+
+<p>
+To set an independent flag use one of:
+<ol><!-- Shuffle List -->
+<li><em>boolalpha</em>          – read/write bool values as alphabetic strings</li>
+<li><em>shopoint</em>           – always insert floating point values with a decimal point and trailing zeros</li>
+<li><em>showbase</em>           – insert integral values with a number base prefix</li>
+<li><em>showpos</em>            – insert non–negative numeric values with a leading +</li>
+<li><em>skipws</em>             – skip white space on extraction operations</li>
+<li><em>unitbuf</em>            – flush output after each insertion</li>
+<li><em>uppercase</em>          – use 0X as the number base prefix for hexadecimal format</li>
+</ol>
+</p>
+
+<p>
+To reset an independent flag use one of:
+<ol><!-- Shuffle List -->
+<li><em>noboolalpha</em>        – read/write bool values as numbers</li>
+<li><em>noshopoint</em>         – only insert floating point values with a decimal point when precision() demands</li>
+<li><em>noshowbase</em>         – do not insert integral values with a number base prefix</li>
+<li><em>noshowpos</em>          – do not insert non-negative numeric values with a leading +</li>
+<li><em>noskipws</em>           – do not skip white space on extraction operations</li>
+<li><em>nounitbuf</em>          – do not flush output after each insertion</li>
+<li><em>nouppercase</em>        – use 0x as the number base prefix for hexadecimal format</li>
+</ol>
+</p>
+
+<p>
+For the group flags, there are is one manipulator for each flag:
+<ol><!-- Shuffle List -->
+<li><em>dec</em>                – use decimal format (default)</li>
+<li><em>hex</em>                – use hexadecimal format</li>
+<li><em>oct</em>                – use octal format</li>
+
+<li><em>fixed</em>              – use fixed point notation (without exponent)</li>
+<li><em>scientific</em>         – use scientific notation (with exponent)</li>
+
+<li><em>left</em>               – pad by appending fill characters to the end</li>
+<li><em>right</em>              – pad by inserting fill characters at the beginning (default)</li>
+<li><em>internal</em>           – pad by inserting fill characters at a specified internal point</li>
+</ol>
+</p>
+
+<p>
+There are four other manipulators that take no parameter:
+<ol><!-- Shuffle List -->
+<li><em>ws</em>                 – extracts white space</li>
+<li><em>endl</em>               – inserts a newline and flushes the stream</li>
+<li><em>ends</em>               – inserts a null character</li>
+<li><em>flush</em>              – flushes the output stream</li>
+</ol>
+</p>
+
+<p>
+There are six manipulators that take a single parameter:
+<ol><!-- Shuffle List -->
+<li><em>setw</em>(nn)                   – corresponds to &apos;width(nn)&apos;</li>
+<li><em>setfill</em>(cc)                – corresponds to &apos;fill(cc)&apos;</li>
+<li><em>setprecision</em>(nn)           –  corresponds to &apos;precision(nn)&apos;</li>
+<li><em>setbase</em>(base)              – &apos;base&apos; should be  8, 10 or 16</li>
+<li><em>setiosflags</em>(flags)         – corresponds to &apos;setf(mask)&apos;</li>
+<li><em>resetiosflags</em>(flags)       – corresponds to &apos;unsetf (flags)&apos;</li>
+</ol>
+</p>
+
+<!--- Shuffle Off --->

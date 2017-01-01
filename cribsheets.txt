@@ -38,5 +38,6 @@
 # Streams
 
 61_streams.html
+62_io-streams.html
 
 # EOF
