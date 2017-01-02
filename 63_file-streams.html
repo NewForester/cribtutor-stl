@@ -1,0 +1,250 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Streams </h1>
+
+<h2> File Streams </h2>
+
+<p>
+File streams provide for input and output to and from files.
+</p>
+<p>
+They are implemented by the classes ifstream, ofstream and fstream in the header file &lt;<em>fstream</em>&gt;.
+</p>
+<p>
+These inherit the istream, ostream or iostream classes and so offer the same <em>insertion</em> and <em>extraction</em> capabilities.
+</p>
+<p>
+They provide constructors and methods for <em>opening</em> and <em>closing</em> files and support file operations such as seek.
+</p>
+
+
+<h3> Opening and Closing Files </h3>
+
+<p>
+The classes provide the means to open and close files but note that &apos;filename&apos; is an operating system dependent pathname.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>ifstream</em>() is the default constructor for input file streams.
+</li><li>
+<em>ofstream</em>() is the default constructor for output file streams.
+</li><li>
+<em>fstream</em>() is the default constructor for input/output file streams.
+</li>
+<li>
+<em>ifstream</em>(filename,mode=ios::in) constructs and opens &apos;filename&apos; for input.
+</li><li>
+<em>ofstream</em>(filename,mode=ios::out) constructs and opens &apos;filename&apos; for output.
+</li><li>
+<em>fstream</em>(filename,mode=ios::out|ios::in) constructs and opens &apos;filename&apos; for input/output.
+</li>
+<li>
+<em>open</em>(filename) associates a stream object with a file &apos;filename&apos;.
+</li><li>
+<em>open</em>(filename,mode) associates a stream object with a file &apos;filename&apos; using the given &apos;mode&apos;.
+</li>
+<li>
+<em>close</em>() breaks the association with a file.
+The stream object is then available for association with another file.
+</li>
+<li>
+<em>is_open</em>() returns true is the stream object is associated with a file.
+An open file must be closed explicitly before associating the stream with a another file.
+</li></ol>
+</p>
+
+<p>
+<em>good</em>() may be used to check for open/close success.
+An exception may be raised by the methods:
+<em>constructors</em>, by definition, never throw.
+</p>
+
+<!-- No longer supported
+<p>
+A third, optional parameter, to open() specifies the file creation mask.
+This is operating system dependent.
+</p>
+-->
+
+<h3> Open Modes </h3>
+
+<p>
+The open mode determines aspects of how the stream may be used to access a file.
+Most are of interest only for binary read/write access:
+<ol>
+<li>ios::<em>in</em>            – allows for input operations only</li>
+<li>ios::<em>out</em>           – allows for output operations only</li>
+<li>ios::<em>app</em>           – append – open for output without truncation</li>
+<li>ios::<em>ate</em>           – at end – the stream put() pointer is positioned at the end of the file</li>
+<li>ios::<em>trunc</em>         – truncate – discards the contents of the file and set its length to 0 after the opening</li>
+<!--
+<li>ios::<em>nocreate</em>      – open fails if the file does not exist</li>
+<li>ios::<em>noreplace</em>     – open fails if the file exists</li>
+-->
+<li>ios::<em>binary</em>        – treats data in the file as binary (operating system dependent)</li>
+</ol>
+</p>
+<p>
+The <em>second</em> three are used to qualify some combination of the <em>first</em> three.
+</p><p>
+Not all combinations make sense: ios::<em>app</em> and ios::<em>trunc</em> are incompatible.
+</p><p>
+ios::<em>out</em> on its own implies ios::<em>trunc</em>.
+</p>
+
+
+<h3> Stream State Flags and Methods </h3>
+
+<p>
+The stream status flags and methods are provided for all streams although their main use is with file streams.
+</p>
+<p>
+There are four stream state flags:
+<ol><!-- Shuffle List -->
+<li>ios::<em>badbit</em>        – an unrecoverable error has occurred</li>
+<li>ios::<em>failbit</em>       – a recoverable error has occurred</li>
+<li>ios::<em>eofbit</em>        – the end–of–file has been reached</li>
+<li>ios::<em>goodbit</em>       – none of the other state flags is set</li>
+</ol>
+The ios::goodbit is not real but may be used to clear the other bits.
+</p>
+
+<p>
+A recoverable error is something like an <em>extraction</em> failed because the input was incompatible with the target type.
+</p>
+
+<p>
+There are 8 stream state methods:
+<ol><!-- Shuffle List --><li>
+<em>bad</em>()                  returns true if ios::badbit is set
+</li><li>
+<em>good</em>()                 returns true if none of the state flags are set
+</li><li>
+<em>fail</em>()                 returns true if either the ios::badbit or ios::failbit is set
+</li><li>
+<em>eof</em>()                  returns true if ios::eofbit flag is set
+</li><li>
+<em>rdstate</em>()              returns the current stream state flags
+</li><li>
+<em>clear</em>(state)           sets the current stream state flags
+</li><li>
+<em>exceptions</em>()           returns the current exception flags
+</li><li>
+<em>exceptions</em>(state)      sets the current exception flags
+</li></ol>
+</p>
+
+<p>
+Overloading of operators means that a stream may be treated as a <em>Boolean</em> value in expressions:
+<pre>
+    if (stream)
+        // stream is good()
+
+    if (!stream)
+        // stream is not good()
+</pre>
+</p>
+
+<p>
+By default, the exception flags are set to ios::<em>goodbit</em> and no exceptions are thrown.
+Setting the exception flags to ios::badbit (etc.) will raise the exception <em>ios::failure</em> when an irrecoverable error (etc.) occurs.
+</p>
+
+
+<h3> Unformatted Input/Ouput </h3>
+
+<p>
+These operations are provided for all streams although their main use is with text files.
+</p>
+<p>
+They are suitable for <em>in-line</em> use unless the description implies otherwise.
+</p>
+
+<p>
+The unformatted i/o methods are:
+<ol><!-- Shuffle List --><li>
+<em>put</em>(cc) inserts exactly one character into an output stream.
+It is an alternative to &apos;operator&lt;&lt;(char cc)&apos;.
+</li><li>
+<em>get</em>() returns the next (possibly white space) character from the input stream.
+At end of file the C-style EOF constant is returned.
+</li><li>
+<em>get</em>(c_ref) reads a single character into &apos;c_ref&apos;.
+</li><li>
+<em>get</em>(c_ptr,nn,delim=&apos;\n&apos;) reads characters into the C-style string &apos;c_ptr&apos;;
+&apos;delim&apos; is not discarded.
+</li><li>
+<em>getline</em>(c_ptr,nn,delim=&apos;\n&apos;) reads characters into the C-style string &apos;c_ptr&apos;;
+&apos;delim&apos; is discarded.
+</li><li>
+<em>getline</em>(is,str,delim=&apos;\n&apos;) of the std::string class reads characters into the string &apos;str&apos;.
+</li><li>
+<em>ignore</em>(limit=1,delim=EOF) discards at most &apos;limit&apos; characters from an input stream.
+It stops if &apos;delim&apos; is encountered.
+</li><li>
+<em>gcount</em>() returns the number of characters actually read by the last unformatted read operation.
+</li><li>
+<em>peek</em>() returns the next character waiting to be read without actually reading it.
+</li><li>
+<em>putback</em>(cc) puts &apos;cc&apos; back into an input stream.
+At most one character may be put back between successive calls to get().
+</li></ol>
+</p>
+
+<p>
+There are no higher level output methods.
+Not even one for C-style strings.
+</p><p>
+Logically, get() and put(cc) are used by all other read/write operations.
+</p>
+
+<p>
+For <em>getline</em>(), the delimiter is discarded, for <em>get</em>() is it not.
+These methods read at most &apos;nn - 1&apos; characters and always null terminate the result.
+They read fewer characters if they encounter &apos;delim&apos;.
+</p>
+
+
+<h3> Binary Input/Output </h3>
+
+<p>
+These operations are provided for all streams although their main use is with binary files.
+</p>
+
+<p>
+The binary i/o methods are:
+<ol><!-- Shuffle List --><li>
+<em>write</em>(c_ptr,count) writes &apos;count&apos; characters to an output stream from the C-style buffer addressed by &apos;c_ptr&apos;.
+</li><li>
+<em>read</em>(c_ptr,count) reads &apos;count&apos; characters from an input stream into the C-style buffer addressed by &apos;c_ptr&apos;.
+</li><li>
+<em>flush</em>() forces buffered output stream content to be written.
+</li><li>
+<em>seekp</em>(pos,dir=ios::beg) moves the position of the put() pointer in a file.
+</li><li>
+<em>seekg</em>(pos,dir=ios::beg) moves the position of the get() pointer in a file.
+</li><li>
+<em>tellp</em>() returns the current position of the put() pointer in a file.
+</li><li>
+<em>tellg</em>() returns the current position of the get() pointer in a file.
+</li></ol>
+</p>
+
+<p>
+The methods
+<ul><li><em>read</em>()</li> and <li><em>write</em>()</li></ul>
+are suitable for in-line use
+and <em>flush</em>() exists as a manipulator.
+</p>
+
+<p>
+The second parameter to the
+<ul><li><em>seekg</em>()</li> and <li><em>seekp</em>()</li></ul>
+methods is:
+<ol><!-- Shuffle List -->
+<li>ios::<em>beg</em> - seek from the beginning of file</li>
+<li>ios::<em>end</em> - seek from the end of file</li>
+<li>ios::<em>cur</em> - seek from the current position</li>
+</ol>
+</p>
