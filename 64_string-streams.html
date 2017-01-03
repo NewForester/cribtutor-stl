@@ -1,0 +1,33 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Streams </h1>
+
+<h2> String Streams </h2>
+
+<p>
+String streams provide for formatted input and output to and from buffers of type std::string.
+</p>
+<p>
+String streams are implemented by the classes istringstream, ostringstream and stringstream in the header file &lt;<em>sstream</em>&gt;.
+</p>
+
+<p>
+The string stream specific methods are:
+<ol><!-- Shuffle List --><li>
+<em>istringstream</em>(mode=ios::in) is the default constructor allowing extraction.
+</li><li>
+<em>ostringstream</em>(mode=ios::out) is the default constructor allowing insertion.
+</li><li>
+<em>stringstream</em>(mode=ios::out|ios::in) is the default constructor allowing extraction and insertion.
+</li><li>
+<em>istringstream</em>(str,mode=ios::in) initialises the stream object with a copy of &apos;str&apos;.
+</li><li>
+<em>ostringstream</em>(str,mode=ios::out) initialises the stream object with a copy of &apos;str&apos;.
+</li><li>
+<em>stringstream</em>(str,mode=ios::out|ios::in) initialises the stream object with a copy of &apos;str&apos;.
+</li><li>
+<em>str</em>() gets the contents of the stream object.
+</li><li>
+<em>str</em>(str) sets the contents of the stream object to a copy of &apos;str&apos;.
+</li></ol>
+</p>
