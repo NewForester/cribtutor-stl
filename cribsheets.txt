@@ -42,4 +42,8 @@
 63_file-streams.html
 64_string-streams.html
 
+# Other Containers
+
+71_strings.html
+
 # EOF

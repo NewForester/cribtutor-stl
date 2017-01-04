@@ -1,0 +1,442 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> Other STL Containers </h1>
+
+
+<h2> STL Strings </h2>
+
+<p>
+The string class is the C++ equivalent of &apos;char []&apos; in C
+but is rather more sophisticated.
+</p>
+
+<h3> Introduction </h3>
+
+<p>
+Early C++ relied on null-terminated C strings.
+This led to the definition of many incompatible string classes for C++.
+Here we are concerned with the <em>std::string</em> class
+first defined in the C++ 98 standard.
+</p>
+<p>
+This class was originally designed and implemented independently of the STL
+but was changed to be more <em>container</em> like before standardisation.
+</p>
+<p>
+Copy-on-write semantics were permitted for reasons of <em>efficiency</em>
+but have been banned since C++ 11 to permit efficient implementation of <em>multi-threading</em>.
+Instead pass strings by reference and declare the references const.
+</p>
+There are many criticisms of the string class including its monolithic design.
+It has a large number of <em>methods</em>, many of which are heavily <em>overloaded</em>.
+</p>
+
+<p>
+To use the string class, include the &lt;<em>string</em>&gt; header file.
+</p>
+
+<p>
+The class string is a class template instantiation defined by:
+<pre>
+    typedef     basic_string&lt;char&gt;      string;
+</pre>
+The C++ 98 standard also defined a <em>wide character</em> string class based on &apos;wchar_t&apos;
+and the C++ 11 standard added two more based on &apos;char16_t&apos; and &apos;char32_t&apos;
+to provide for proper <em>unicode</em> support on Windows and Linux.
+</p>
+
+
+<h3> Sequence Container Behaviour </h3>
+
+<p>
+The string class is more convenient than vector&lt;char&gt; for most purposes.
+It null terminates strings for compatibility with C.
+</p>
+
+<p>
+The string class supports the standard <em>sequence</em> container methods,
+including iterators, other than front(), back() and so forth.
+It supports <em>random access</em>.
+</p>
+
+<p>
+The string classes uses the default basic_string&lt;&gt; traits and allocator.
+</p>
+
+<p>
+Internally, the string&apos;s characters may not be stored contiguously
+and operations that modify string contents may
+involved splitting or coalescing segments.
+</p>
+
+<p>
+The methods
+<ul>
+<li><em>data</em>() and </li>
+<li><em>c_str</em>()</li>
+</ul>
+that return pointers to C-style characters arrays
+may also involve coalescence.
+</p>
+
+<p>
+Thus iterators, references and pointers must be considered <em>invalidated</em> by calls to:
+<ol>
+<li>non-const string class method (other than the iterator and random access methods)</li>
+<li>the data() and c_str() methods and</li>
+<li>swap(), getline() and operator&gt;&gt;.</li>
+</ol>
+They are also invalidated by a call to an iterator or random access method
+after any of the above except for an iterator returned by an insert() or erase() operation.
+</p>
+
+<p>
+The string class methods throw the exceptions:
+<ol><!-- Shuffle List -->
+<li><em>out_of_range</em> - attempted access beyond the end of the string</li>
+<li><em>length_error</em> - string length would exceed the implementation maximum</li>
+<li><em>bad_alloc</em> - out of memory</li>
+</ol>
+</p>
+
+<p>
+There is one constant:
+<pre>
+    static const size_t npos = -1;
+</pre>
+that is used in different contexts to mean:
+not <em>found</em>,
+<ul>
+<li>maximum <em>size</em> or </li>
+<li>maximum <em>position</em>.</li>
+</ul>
+</p>
+
+
+<h3> Method Parameters </h3>
+
+<p>
+The basic_string&lt;&gt; class template supports a large number of methods
+in addition to the standard sequence container methods.
+</p>
+
+<p>
+Many have parameter overloads,
+partly so they may be used with
+<ul>
+<li>&apos;<em>char</em>&apos; and</li>
+<li>&apos;<em>char*</em>&apos; arguments.</li>
+</ul>
+</p>
+
+<p>
+The parameter <em>overloads</em> are:
+<ol><!-- Shuffle List -->
+<li>str . . . . . - the <em>string</em> &apos;str&apos;</li>
+<li>str, pos, len - the <em>substring</em> &apos;str.substr(pos,len)&apos;</li>
+<li>c_str . . . . - the <em>C string</em> &apos;c_str&apos;</li>
+<li>c_str, cnt .. - the first &apos;cnt&apos; <em>characters</em> of &apos;c_str&apos;</li>
+<li>nn, chr . . . - &apos;nn&apos; <em>repetitions</em> of the character &apos;chr&apos;</li>
+<li>first, last . - the characters in the <em>iterator range</em> &apos;[first,last)&apos;</li>
+</ol>
+Not all methods support all overloads.
+</p>
+
+<p>
+Logically, a <em>temporary</em> &apos;parameter string&apos; is constructed and passed to the &apos;vanilla&apos; method.
+</p>
+
+<p>
+A &apos;len&apos; of string::npos means to the <em>end</em> of a string.
+If &apos;pos+len&apos; is beyond the end of the string, the operation will stop when a null terminator is encountered.
+</p>
+
+<p>
+A &apos;pos&apos; of 0 means the <em>start</em> of the string.
+If &apos;pos&apos; is beyond the end of the string, an out_of_range exception will be thrown.
+</p>
+
+<p>
+The parameter range &apos;[first,last)&apos; does not have to refer to a <em>string</em> object but
+results are undefined if the range is not wholly within a container
+or passes beyond a null terminator.
+</p>
+
+
+<h3> Sequence Container Methods </h3>
+
+<p>
+The string class basic_string&lt;char&gt; behaves very much like vector&lt;char&gt; with a null terminator at the end.
+</p>
+
+<p>
+The sequence containers methods are:
+<ul>
+<li><em>string</em>(),</li>
+<li><em>assign</em>()/<em>operator=</em>,</li>
+<li><em>insert</em>(),</li>
+<li><em>erase</em>(),</li>
+<li><em>size</em>()/<em>length</em>(),</li>
+<li><em>resize</em>(),</li>
+<li><em>capacity</em>() and</li>
+<li><em>reserve</em>(),</li>
+</ul>
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+Random access is supported: <em>at</em>() will throw an exception; <em>operator[]</em> will not.
+<em>operator[]</em> will return the null character if the subscript is out of range.
+</p>
+
+<p>
+<em>size</em>() has the alias <em>length</em>().
+The null terminator is not counted.
+</p>
+
+<p>
+<ul>
+<li><em>capacity</em>() and</li>
+<li><em>reserve</em>(nn) are supported.</li>
+</ul>
+The null terminator is not counted.
+</p>
+
+<p>
+
+<em>resize</em>(nn,chr='\0') inserts &apos;chr&apos; as necessary before the null terminator.
+The null terminator is not counted.
+</p>
+
+<p>
+The overloaded <em>constructor</em> methods initialise a string with characters from a &apos;parameter string&apos;:
+<ol>
+<li>string(str,pos,len=string::npos)</li>
+<li>string(c_str)</li>
+<li>string(c_str,cnt)</li>
+<li>string(nn,chr)</li>
+<li>string(first,last)</li>
+</ol>
+</p>
+
+<p>
+The overloaded <em>operator=</em> methods are equivalent to assign():
+<ol>
+<li>operator=(str)      as for &apos;assign(str)&apos;</li>
+<li>operator=(c_str)    as for &apos;assign(c_str)&apos;</li>
+<li>operator=(chr)      as for &apos;assign(1,chr)&apos;</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>assign</em>() methods erase the existing string contents and reinitialise with characters from a &apos;parameter string&apos;:
+<ol>
+<li>assign(str)</li>
+<li>assign(str,pos,len)</li>
+<li>assign(c_str)</li>
+<li>assign(c_str,len)</li>
+<li>assign(nn,chr)</li>
+<li>assign(first,last)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>insert</em>() methods insert characters from a &apos;parameter string&apos; into the string before the position &apos;here&apos;:
+<ol>
+<li>insert(here,str)</li>
+<li>insert(here,str,pos,len)</li>
+<li>insert(here,c_str)</li>
+<li>insert(here,c_str,cnt)</li>
+<li>insert(here,nn,chr)</li>
+<li>insert(here,first,last)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The <em>erase</em>() methods erase characters from a string:
+<ol>
+<li>erase(pos,len=string::npos) erases a substring</li>
+<li>erase(first,last)           erases a character range &apos;[first,last)&apos;</li>
+<li>erase(it)                   erases the single character at &apos;*it&apos;</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The end of sequence methods are not supported except for <em>push_back</em>(chr), which is provided for iterator compatibility only.
+</p>
+
+<!-- Shuffle Off -->
+
+
+<h3> Overloaded String Methods </h3>
+
+<p>
+The overload string methods are:
+<ul>
+<li><em>append</em>()/<em>operator+=</em>,</li>
+<li><em>compare</em>(),</li>
+<li><em>replace</em>(),</li>
+<li><em>find</em>(),</li>
+<li><em>rfind</em>(),</li>
+<li><em>find_first_of</em>(),</li>
+<li><em>find_first_not_of</em>(),</li>
+<li><em>find_last_of</em>(),</li>
+<li><em>find_last_not_of</em>(),</li>
+</ul>
+</p>
+
+<!-- Shuffle On -->
+
+<p>
+The overloaded <em>append</em>() methods append characters from a &apos;parameter string&apos; to the end of the string:
+<ol>
+<li>append(str)</li>
+<li>append(str,pos,len)</li>
+<li>append(c_str)</li>
+<li>append(c_str,cnt)</li>
+<li>append(nn,chr)</li>
+<li>append(first,last)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>compare</em>() methods compares string contents with those of a &apos;parameter string&apos;:
+<ol>
+<li>compare(str)</li>
+<li>compare(c_str)</li>
+</ol>
+The result is as for the C library function &apos;strcmp()&apos;.
+</p>
+
+<p>
+The overloaded <em>compare</em>(spos,slen,...), methods compare &apos;substr(spos,slen)&apos; contents with those of a &apos;parameter string&apos;:
+<ol>
+<li>compare(spos,slen,str)</li>
+<li>compare(spos,slen,c_str)</li>
+<li>compare(spos,slen,c_str,cnt)</li>
+<li>compare(spos,slen,str,pos,len)</li>
+</ol>
+The result is as for the C library function &apos;strcmp()&apos;.
+</p>
+
+<p>
+The overloaded <em>operator+=</em> methods calls append():
+<ol>
+<li>operator+=(str)     as for append(str)</li>
+<li>operator+=(c_str)   as for append(c_str)</li>
+<li>operator+=(chr)     as for append(1,chr)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>replace</em>(spos,slen,...) method replaces &apos;substr(spos,slen)&apos; with those from the &apos;parameter string&apos;:
+<ol>
+<li>replace(spos,slen,str)</li>
+<li>replace(spos,slen,str,pos,len)</li>
+<li>replace(spos,slen,c_str)</li>
+<li>replace(spos,slen,c_str,cnt)</li>
+<li>replace(spos,slen,nn,chr)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>replace</em>(start,end,...) methods replace the characters in the range '[start,end)' with those from the &apos;parameter string&apos;:
+<ol>
+<li>replace(start,end,str)</li>
+<li>replace(start,end,c_str)</li>
+<li>replace(start,end,c_str,cnt)</li>
+<li>replace(start,end,nn,chr)</li>
+<li>replace(start,end,first,last)</li>
+</ol>
+All return a reference to the string.
+</p>
+
+<p>
+The overloaded <em>find</em>() methods return the position in a string of the first occurrence, at or after &apos;pos&apos;, of the &apos;parameter string&apos;
+<ol>
+<li>find(str,pos=0)</li>
+<li>find(c_str,pos=0)</li>
+<li>find(c_str,pos,cnt)</li>
+<li>find(chr,pos=0)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<p>
+The overloaded <em>rfind</em>() methods return the position in a string of the last occurrence, at or before &apos;pos&apos;, of the &apos;parameter string&apos;
+<ol>
+<li>rfind(str,pos=0)</li>
+<li>rfind(c_str,pos=0)</li>
+<li>rfind(c_str,pos,cnt)</li>
+<li>rfind(chr,pos=0)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<p>
+The overloaded <em>find_first_of</em>() methods return the position in a string of the first occurrence, at or after &apos;pos&apos;, of any character in the &apos;parameter string&apos;.
+<ol>
+<li>find_first_of(str,pos=0)</li>
+<li>find_first_of(chr,pos=0)</li>
+<li>find_first_of(c_str,pos=0)</li>
+<li>find_first_of(c_str,pos,cnt)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<p>
+The overloaded <em>find_first_not_of</em>() methods return the position in a string of the first occurrence, at or after &apos;pos&apos;, of any character not in the &apos;parameter string&apos;.
+<ol>
+<li>find_first_not_of(str,pos=0)</li>
+<li>find_first_not_of(chr,pos=0)</li>
+<li>find_first_not_of(c_str,pos=0)</li>
+<li>find_first_not_of(c_str,pos,cnt)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<p>
+The overloaded <em>find_last_of</em>() methods return the position in a string of the last occurrence, at or after &apos;pos&apos;, of any character in the &apos;parameter string&apos;.
+<ol>
+<li>find_last_of(str,pos=0)</li>
+<li>find_last_of(chr,pos=0)</li>
+<li>find_last_of(c_str,pos=0)</li>
+<li>find_last_of(c_str,pos,cnt)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<p>
+The overloaded <em>find_last_not_of</em>() methods return the position in a string of the last occurrence, at or after &apos;pos&apos;, of any character not in the &apos;parameter string&apos;.
+<ol>
+<li>find_last_not_of(str,pos=0)</li>
+<li>find_last_not_of(chr,pos=0)</li>
+<li>find_last_not_of(c_str,pos=0)</li>
+<li>find_last_not_of(c_str,pos,cnt)</li>
+</ol>
+All return &apos;string::npos&apos; to indicate &apos;not found&apos;.
+</p>
+
+<!-- Shuffle Off -->
+
+
+<h3> Other String Methods </h3>
+
+<p>
+These methods are not overloaded:
+<ol><!-- Shuffle List -->
+<li><em>c_str</em>()     returns a pointer to the string&apos;s contents, null terminated</li>
+<li><em>data</em>()      returns a pointer to the string&apos;s contents, not (necessarily) null terminated</li>
+<li><em>copy</em>(c_str,len,pos=0)       copy &apos;len&apos; characters starting with &apos;pos&apos; to the C string &apos;c_str&apos;</li>
+<li><em>substr</em>(pos,len=string::npos)        returns a null terminated substring</li>
+</ol>
+Beware: copy() does not copy beyond the null terminator but it does not null terminate the result in &apos;c_str&apos;.
+</p>
