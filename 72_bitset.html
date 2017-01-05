@@ -1,0 +1,107 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> Other STL Containers </h1>
+
+
+<h2> Bitset </h2>
+
+<p>
+A bitset&lt;&gt; class template is a packed, fixed size, sequence of bits.
+It is not an associative or even a standard container.
+</p>
+
+<p>
+To use the bitset&lt;&gt; class template, include the &lt;<em>bitset</em>&gt; header file.
+</p>
+
+<p>
+The bitset class template has a <em>single</em> parameter, 'N', the number of bits in the set.
+There are no <em>iterators</em>.
+</p>
+
+<p>
+There are two external representations:
+<ol><!-- Shuffle List --><li>
+<em>integer</em>
+is an unsigned long integer taken to be a bit-mask;
+the right most bit of the mask is bit 0
+</li><li>
+<em>string</em>
+is a string of '0' and '1' characters;
+the right most character of the string is bit 0
+</li></ol>
+</p>
+
+<p>
+The default constructor <em>resets</em> all bits.
+There are two additional constructors:
+<ol><!-- Shuffle List --><li>
+<i>bitset</i>(value)
+the bitset is initialised from the external <em>integer</em> representation 'value'.
+</li><li>
+<i>bitset</i>(str,pos=0,len=string::npos)
+the bitset is initialised from the external <em>string</em> representation 'str.substr(pos,len)'.
+</li></ol>
+Any other bits are reset.
+</p>
+
+<p>
+The member functions
+<ol><!-- Shuffle List -->
+<li><em>to_ulong</em>()         returns the integer</li>
+<li><em>to_string</em>()        returns the string representation</li>
+</ol>
+of the current value of the bitset.
+</p>
+
+<p>
+The following member functions concern the whole bitset:
+<ol><!-- Shuffle List -->
+<li><em>any</em>()      return true if any bit is set</li>
+<li><em>count</em>()    return the number of bits set</li>
+<li><em>flip</em>()     inverts all bits</li>
+<li><em>none</em>()     returns true if no bit is set</li>
+<li><em>reset</em>()    resets all bits</li>
+<li><em>set</em>()      sets all bits</li>
+<li><em>size</em>()     returns N</li>
+</ol>
+</p>
+
+<p>
+The following member functions concern a single bit:
+<ol><!-- Shuffle List -->
+<li><em>flip</em>(nn)           invert bit 'nn'</li>
+<li><em>reset</em>(nn)          reset bit 'nn'</li>
+<li><em>set</em>(nn,val=true)   set bit 'nn' to 'val'</li>
+<li><em>test</em>(nn)           returns bit 'nn'</li>
+</ol>
+They throw an out_of_range exception if 'nn' is invalid.
+</p>
+
+<p>
+The random access operator is defined:
+<ol><!-- Shuffle List -->
+<li><i>operator[]</i>(nn) as a <em>rvalue</em>, returns bit 'nn'</li>
+<li><i>operator[]</i>(nn) as a <em>lvalue</em>, sets bit 'nn'</li>
+</ol>
+Behaviour is undefined if ''nn'' is out of range.
+</p>
+
+<p>
+Note: 'bitset[nn].flip()' does work.
+</p>
+
+<p>
+The
+<ul>
+<li><em>bitwise</em>,</li>
+<li><em>shift</em> and</li>
+<li><em>equality</em></li>
+</ul>
+operators are all defined.
+</p>
+
+<p>
+The insertion and extraction operators are also defined and convert to and from
+the external <em>string</em> representation.
+</p>

@@ -45,5 +45,6 @@
 # Other Containers
 
 71_strings.html
+72_bitset.html
 
 # EOF
