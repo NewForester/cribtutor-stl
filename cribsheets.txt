@@ -46,5 +46,6 @@
 
 71_strings.html
 72_bitset.html
+73_locale.html
 
 # EOF

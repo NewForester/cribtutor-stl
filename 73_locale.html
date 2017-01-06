@@ -1,0 +1,684 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> Other STL Containers </h1>
+
+
+
+<h2> Locale </h2>
+
+<p>
+Localisation is about internationalisation.
+It is about producing software (applications) for use around the world.
+</p>
+<p>
+This crib-sheet is an <em>overview</em> of the C++ locale facilities:
+it does not cover all the complexities of this subject.
+</p>
+
+<!--
+The author of this crib sheet has limited experience of internationalisation
+and even less of localisation in C/C++.
+
+Describing the C++ localisation when the concepts are only understood
+in abstract terms has not been easy.
+-->
+
+
+
+<h3> Introduction </h3>
+
+<p>
+A <em>locale</em> is a set of parameters that define
+the user&apos;s language, alphabet (character set), country and regional preferences.
+
+Software applications use these <em>parameters</em> to adapt their handling of input and output.
+</p>
+<p>
+locale identifiers are subject to international standardisation
+but locale implementation is <em>platform</em> specific
+(i.e. Microsoft does not use POSIX locales and Linux does not use Windows locales).
+</p>
+<p>
+On <em>POSIX</em> platforms locale identifiers are defined by ISO 15897.
+Their format is:
+<pre>
+    [language[_territory][.codeset][@modifier]].
+</pre>
+</p>
+
+<p />
+
+<p>
+C localisation is available in the header file &lt;<em>clocale</em>&gt;.
+It provides 13 categories of locale parameters that may be set independently
+but only one <em>global</em> locale.
+</p>
+<p>
+C++ localisation is provided in the &lt;<em>locale</em>&gt; header file.
+locale <em>objects</em> provide support for the 6 most important parameter categories through <em>facets</em>.
+</p>
+<p>
+These cover:
+<ol><!-- Shuffle List -->
+<li> <em>formatting</em> of date/time, numeric and monetary values    </li>
+<li> <em>character</em> classification and conversion    </li>
+<li> string <em>collation</em>    </li>
+<li> <em>message</em> retrieval   </li>
+</ol>
+</p>
+<p>
+Localisation is not <em>automatic</em>:
+applications are designed and implemented with localisation in mind.
+The amount of work needed depends on the degree of customisation required.
+</p>
+<p>
+Some aspects of locale specific input and output can be a handled automatically.
+In particular character set <em>conversion</em>.
+</p>
+<p>
+In the past this meant conversion
+to/from the system <em>code page</em> on output/input.
+
+Today this generally means conversion to/from <em>Unicode</em>.
+
+That is UTF-8 on POSIX systems and UTF-16 on Windows systems.
+</p>
+<p>
+The <em>global</em> nature of the C locale means it affects all input and output.
+
+The <em>object oriented</em> nature of C++ locales means that
+a locale can be i/o stream specific:  the locale is <em>imbued</em> in the stream.
+</p>
+<p>
+<em>Formatting</em> manipulators, methods and flags alter how numeric values
+are input and output in C++.
+
+When imbued with a locale, their effects are altered, sometimes subtly.
+</p>
+<p>
+Not all aspects of the locale can be handled automatically and not all aspects of input/output are stream related
+(consider field based GUI/web forms).
+
+Typcially, the details of application specific locale handling
+will be <em>encapsulated</em> in custom insertion/extraction <em>operators</em>.
+</p>
+<p>
+Since locale handling is intimately connected with stream handling,
+the locale methods have <em>intricate</em> calling sequences.
+</p>
+<p>
+The STL does not provide support for all aspects of a locale
+(for example paper size)
+but the locale may be customised by <em>extension</em> and <em>overlay</em>.
+</p>
+
+<p />
+
+<p>
+C/C++ provide the &apos;char&apos; and &apos;wchar_t&apos;
+(aka narrow and wide character) types.
+The first is generally adequate for <em>phonetic</em> alphabets
+used by languages such as English and Russian
+but the second is needed for <em>logographic</em> alphabets
+used by languages such as Chinese and Japanese.
+</p>
+<p>
+STL locale handling uses templates and provides support for both
+<em>narrow</em> and <em>wide</em> character types.
+
+With C++ 11 the &apos;char16_t&apos; and &apos;char32_t&apos;
+provide additional support for Unicode.
+</p>
+<p>
+Every locale object provides locale specific template <em>specialisations</em>.
+The STL also provides <em>standalone</em>, locale independent,
+template specialisations
+that generally correspond to the default &quot;C&quot; locale.
+</p>
+<p>
+The rest of this crib-sheet leaves out such <em>details</em> for the sake of clarity.
+</p>
+
+
+
+<h3> The locale Class </h3>
+
+<p>
+Localisation is provided by the <em>locale</em> class.
+This may be thought of as a container for <em>facet</em>&lt;&gt; objects.
+The locale knows nothing of the capabilities of its facets.
+It does not provide internationalisation services itself.
+</p>
+<p>
+The locale contains six (standard) facet&lt;&gt; objects for
+six categories of localisation.
+<ol><!-- Shuffle List -->
+<li> <em>LC_NUMERIC</em>  - rules and symbols for number formatting      </li>
+<li> <em>LC_MONETARY</em> - rules and symbols for monetary information   </li>
+<li> <em>LC_TIME</em>     - values for date and time information         </li>
+<li> <em>LC_CTYPE</em>    - character classification and case conversion </li>
+<li> <em>LC_COLLATE</em>  - character collation sequences                </li>
+<li> <em>LC_MESSAGES</em>  - formats and values of messages              </li>
+</ol>
+In general, each category is implemented by more than one facet object.
+</p>
+<p>
+The locale container design allows <em>custom</em> facets,
+which can either be in addition to or instead of the standard facets.
+</p>
+<p>
+The design also allows the same facet&lt;&gt; <em>objects</em> to be used
+in different <em>locales</em>.
+They can be retrieved and copied efficiently.
+</p>
+
+<p>
+Standard locales are constructed by <em>name</em>:
+<pre>
+    locale(&quot;De_DE&quot;);
+</pre>
+Names are those of C locales.
+</p>
+<p>
+The name of C locales are <em>platform</em> dependent.
+At a very minimum, the system default locale <em>&quot;&quot;</em> and
+the minimal <em>&quot;C&quot;</em> locale are defined.
+</p>
+<p>
+<em>Custom</em> locales are constructed by <em>composition</em>:
+<pre>
+   locale here (locale::classic(), locale(&quot;De_DE&quot;), LC_NUMERIC);
+</pre>
+where
+<pre>
+   locale::classic();
+</pre>
+returns the equivalent of the &quot;C&quot; locale
+(which corresponds more or less to US English ASCII).
+</p>
+<p>
+Once constructed, locale objects are <em>immutable</em>.
+Copy operations are <em>cheap</em> (handle-body-idiom).
+</p>
+<p>
+There are two template functions that operate on locale objects:
+<ol><!-- Shuffle List -->
+<li> <em>use_facet</em>() - retrieve a facet from a locale       </li>
+<li> <em>has_facet</em>() - test whether a locale has a facet    </li>
+</ol>
+</p>
+<p>
+Since locales are constructed by composition,
+they all contain the facets defined in the standard:
+<em>has_facet</em>() is only needed when using additional <em>custom</em> facets.
+</p>
+<p>
+Which facet is retrieved by <em>use_facet</em>() is specified
+by template <em>instantiation</em> and not by parameter:
+<pre>
+    const numpunct&lt; char &gt;&amp; myfacet = use_facet &lt; numpunct&lt; char &gt; &gt; (mylocale);
+    myvar = myfacet.decimal_point();
+</pre>
+</p>
+<p>
+Assume the <em>reference</em> to a facet is valid until the locale object is <em>destroyed</em>.
+</p>
+<p>
+The method:
+<ol><!-- Shuffle List -->
+<li> locale::<em>global</em>() </li>
+</ol>
+may be used to set the global C++ locale.
+
+This also affects the C locale and may <em>break</em> third party packages
+that are not locale aware.
+</p>
+
+
+<h3> Use of locale Objects </h3>
+
+<p>
+A locale may be <em>imbued</em> in an i/o stream as follows:
+<pre>
+    cout.imbue(locale(&quot;ru_RU.UTF-8&quot;));
+</pre>
+</p>
+<p>
+This may affect:
+<ol><!-- Shuffle List -->
+<li> character set <em>conversion</em> at a low level    </li>
+<li> <em>number</em> insertion and extraction            </li>
+<li> white space recognition during <em>extraction</em>  </li>
+</ol>
+For example:
+<pre>
+    // This will output 1.234.567,89 ...
+
+    double n = 1234567.89;
+    cout.imbue(std::locale(&quot;de_DE&quot;));
+    cout &lt;&lt; std::fixed &lt;&lt; n &lt;&lt; endl;
+
+    // ... and this will read it back in
+
+    istringstream de_in(&quot;1.234.567,89&quot;);
+    de_in.imbue(locale(&quot;de_DE&quot;));
+
+    double f1;
+    de_in &gt;&gt; f1;
+</pre>
+</p>
+
+
+<h3> facet Class Templates </h3>
+
+<p>
+The standard facets are:
+<ol><!-- Shuffle List -->
+<li> <em>time_get</em>&lt;&gt;      parses time/date values from an input character sequence into struct std::tm </li>
+<li> <em>time_put</em>&lt;&gt;      formats contents of struct std::tm for output as a character sequence        </li>
+
+<li> <em>num_get</em>&lt;&gt;       parses numeric values from an input character sequence                       </li>
+<li> <em>num_put</em>&lt;&gt;       formats numeric values for output as a character sequence                    </li>
+<li> <em>numpunct</em>&lt;&gt;      defines punctuation characters and formatting rules for numeric values       </li>
+
+<li> <em>money_get</em>&lt;&gt;     parses a monetary value from an input character sequence                     </li>
+<li> <em>money_put</em>&lt;&gt;     formats a monetary value for output as a character sequence                  </li>
+<li> <em>moneypunct</em>&lt;&gt;    defines punctuation characters and formatting rules for monetary values      </li>
+
+<li> <em>ctype</em>&lt;&gt;         defines character classification tables and provides helper routines         </li>
+<li> <em>collate</em>&lt;&gt;       defines lexicographical comparison and hashing of strings                    </li>
+<li> <em>messages</em>&lt;&gt;      implements retrieval of strings from message catalogues                      </li>
+
+<li> <em>codecvt</em>&lt;&gt;       converts between external and internal character encodings                  </li>
+</ol>
+All have a common base class std::locale::facet&lt;&gt;.
+</p>
+<p>
+For codecvt&lt;&gt; the first two template parameters are character types.
+For all other facets, the first template parameter is a character type.
+The STL provides specialisations for <em>char</em> and <em>wchar_t</em>.
+</p>
+<!--
+Support for &apos;char16_t&apos; and &apos;char32_t&apos; is provided by the codecvt facet from C++ 11 onwards.
+-->
+<p>
+The twelve facet templates above are to be used with use_facet() to retrieve facet objects from a locale object.
+They define abstract interface classes with no implementation.
+However, use_facet() returns references to concrete implementations instantiated using the constructor for:
+<ol><!-- Shuffle List -->
+<li> <em>numpunct_byname</em>     instantiation of numpunct for a named locale   </li>
+<li> <em>moneypunct_byname</em>   instantiation of moneypunct for a named locale </li>
+<li> <em>time_get_byname</em>     instantiation of time_get for a named locale   </li>
+<li> <em>time_put_byname</em>     instantiation of time_put for a named locale   </li>
+<li> <em>ctype_byname</em>        instantiation of ctype for a named locale      </li>
+<li> <em>collate_byname</em>      instantiation of collate for a named locale    </li>
+<li> <em>messages_byname</em>     instantiation of messages for a named locale   </li>
+<li> <em>codecvt_byname</em>      instantiation of codecvt for a named locale    </li>
+</ol>
+Their constructors are only of interest when constructing special purpose locale objects.
+</p>
+
+
+<h3> Character Conversion </h3>
+
+<p>
+The codecvt facet of the <em>LC_CTYPE</em> category encapsulates character set conversion.
+Specifically between some <em>external</em> character encoding and the corresponding C++ internal &apos;narrow&apos; or &apos;wide&apos; character representation.
+</p>
+<p>
+The <em>wide</em> character representations of a character requires one (typically 4 byte) wchar_t position;
+The <em>narrow</em> character representations requires one or more char positions.
+</p>
+<p>
+<em>Multi-byte</em> characters are <em>narrow</em> characters that requires more than one char position.
+Variable byte encoding and state machine encoding are the two approaches used for multi-byte encoding.
+</p>
+<p>
+The methods provided by the codecvt facet are:
+<ol><!-- Shuffle List -->
+<li> codecvt.<em>in</em>()                convert a string from external to internal representation, such as when reading from file      </li>
+<li> codecvt.<em>out</em>()               convert a string from internal to external representation, such as when writing to file        </li>
+<li> codecvt.<em>unshift</em>()           generate the necessary state machine termination sequence for incomplete conversion to the external representation     </li>
+
+<li> codecvt.<em>always_noconv</em>()     true if the conversion is the identity (i.e. no conversion required)   </li>
+<li> codecvt.<em>encoding</em>()          the number of external characters needed to produce one internal character (if constant)       </li>
+<li> codecvt.<em>length</em>()            the number of external characters that would be consumed by conversion into a given number of internal characters      </li>
+<li> codecvt.<em>max_length</em>()        the maximum number of external characters that may be generated by the conversion of a single internal character       </li>
+</ol>
+</p>
+<p>
+codecvt.encoding() returns 0 for a <em>variable byte</em> encoding and -1 for a <em>state machine</em> encoding.
+</p>
+
+<!--
+C++ 11 appears to add support for Unicode as external representations and also,
+through the template conversion classes wstring_convert and wbuffer_convert,
+the use of Unicode as internal representations.
+-->
+
+
+
+<h3> Message Retrieval </h3>
+
+<p>
+The <em>LC_MESSAGES</em> category has a single facet that encapsulates the retrieval of strings from message catalogues.
+Message catalogues support the lookup of locale specific <em>translations</em> of user interface text (such as error messages).
+</p>
+<p>
+The <em>message</em> facet delegates to platform specific routines:
+on GNU/Linux systems, message catalogues are provided by GNU <em>gettext</em> and on POSIX systems by <em>catgets</em>.
+</p>
+<p>
+The methods provided by the message facet are:
+<ol><!-- Shuffle List -->
+<li> message.<em>open</em>()    open a named message catalogue   </li>
+<li> message.<em>get</em>()     retrieve a message from an open message catalogue    </li>
+<li> message.<em>close</em>()   close a message catalogue        </li>
+</ol>
+</p>
+<p>
+message.open() takes as parameters the <em>catalogue</em> name and a <em>locale</em> object.
+It returns a <em>handle</em> of type catalogue that can then be used with message.get() and message.close().
+</p>
+<p>
+The <em>catalogue</em> name is just that (probably the name of the program/application).
+The file system location of catalogues is <em>platform</em> specific.
+</p>
+<p>
+If the catalogue could not be opened the handle has a <em>negative</em> value.
+Otherwise, the handle remains valid until passed to message.close().
+</p>
+<p>
+message.close() <em>releases</em> any resources allocated to an open catalogue.
+</p>
+<p>
+message.get() is passed <em>text</em> to translate
+and returns the <em>translation</em> found in the catalogue or else a copy of the original text.
+</p>
+<p>
+message.get() also takes two <em>platform</em> specific parameters.
+On POSIX systems identify the message to be retrieved.
+On GNU libstdc++ systems these parameters are <em>ignored</em> and the text is used (as a hash key ?).
+</p>
+
+
+
+<h3> String Collation </h3>
+
+<p>
+The <em>LC_COLLATE</em> category has a single facet that encapsulates locale specific string collation (comparison) and string hashing.
+</p>
+<p>
+Collation order (as opposed to lexicographical order) is <em>dictionary</em> order:
+<ol><!-- Shuffle List -->
+<li> position within the alphabet takes <em>precedence</em> over case       </li>
+<li> lowercase <em>collates</em> before uppercase                           </li>
+<li> locale specific order may apply to <em>diacriticals</em>               </li>
+<li> groups of characters may <em>compare</em> as a single collation unit   </li>
+</ol>
+For example, in Czech &apos;ch&apos; follows &apos;h&apos; and precedes &apos;i&apos;,
+while Hungarian &apos;dzs&apos; follows &apos;dz&apos; and precedes &apos;g&apos;.
+</p>
+<p>
+The methods provided by the collate facet are:
+<ol><!-- Shuffle List -->
+<li> collate.<em>compare</em>()    compare two strings using dictionary order                            </li>
+<li> collate.<em>transform</em>()  transform a string so that collation can be replaced by comparison    </li>
+<li> collate.<em>hash</em>()       generate an integer hash value using collation rules                  </li>
+</ol>
+</p>
+<p>
+collate.compare() compares two character <em>sequences</em> using locale collation rules.
+The return value is as for <em>strcmp</em>()
+with 0 indicating the two sequences are <em>equivalent</em>.
+</p>
+<p>
+collate.transform() converts a character sequence so that
+<em>operator&lt;</em> will yield the same results on transformed strings as
+collate.compare() does on the original strings (but is generally faster).
+</p>
+<p>
+collate.hash() converts a character sequence to an <em>integer</em> hash value such that all strings that collate.compare() would consider equivalent have the same hash value
+and the <em>probability</em> of two strings otherwise having the same hash value is very small.
+</p>
+<p>
+When a locale object is passed as a comparator to an STL <em>algorithm</em>,
+the locale&apos;s collate.compare() function is invoked to perform the actual comparison.
+True is returned if the two strings are equivalent:
+<pre>
+    sort(v.begin(), v.end(), locale(&quot;sv_SE.UTF-8&quot;));
+</pre>
+</p>
+
+<!-- The collate facet is used by std::basic_regex in C++ 11 and later. -->
+
+
+
+<h3> Character Classification </h3>
+
+<p>
+The ctype facet of the <em>LC_CTYPE</em> category encapsulates character classification and conversion.
+</p>
+<p>
+The methods provided by the ctype facet are:
+<ol><!-- Shuffle List -->
+<li> ctype.<em>is</em>()        classify a character or a character sequence     </li>
+
+<li> ctype.<em>scan_is</em>()   locate the first character in a sequence that conforms to the given classification             </li>
+<li> ctype.<em>scan_not</em>()  locate the first character in a sequence that does not conform to the given classification     </li>
+
+<li> ctype.<em>toupper</em>()   convert a character or characters to uppercase   </li>
+<li> ctype.<em>tolower</em>()   convert a character or characters to lowercase   </li>
+
+<li> ctype.<em>widen</em>()     convert a character or characters from char to &apos;charT&apos;   </li>
+<li> ctype.<em>narrow</em>()    convert a character or characters from &apos;charT&apos; to char   </li>
+</ol>
+</p>
+<p>
+ctype.is() has two forms.
+The first takes a mask and a character as input and returns a <em>bool</em> to indicate a match.
+The second takes a character <em>sequence</em> as input and returns a (character) sequence of masks.
+</p>
+<p>
+ctype.scan_is()/ctype.scan_not() take a character <em>sequence</em> and return a <em>pointer</em> to the first matching/non-matching character.
+</p>
+<p>
+The other methods return the <em>converted</em> character when passed a single character.
+Alternatively they are passed two character <em>sequences</em>.
+</p>
+<p>
+ctype.toupper()/ctype.tolower() convert characters <em>in-place</em> whereas
+ctype.widen()/ctype.narrow() take a pointer to a <em>destination</em> sequence.
+</p>
+
+
+<h3> Formatting of Numeric Values </h3>
+
+<p>
+The <em>LC_NUMERIC</em> facets encapsulate conversion between external character representations of numeric values and C++ numeric types.
+</p>
+<p>
+The methods provided by these facets are:
+<ol><!-- Shuffle List -->
+<li> num_put.<em>put</em>()               format a C++ numeric value for output as a character sequence  </li>
+<li> num_get.<em>get</em>()               parse a character sequence producing a numeric value   </li>
+
+<li> numpunct.<em>decimal_point</em>()    return the &apos;decimal point&apos; character   </li>
+<li> numpunct.<em>thousands_sep</em>()    return the &apos;thousands separator&apos; character     </li>
+<li> numpunct.<em>grouping</em>()         return the numbers of digits between pairs of &apos;thousand separators&apos;    </li>
+<li> numpunct.<em>falsename</em>()        return the locale language representation of &apos;false&apos;   </li>
+<li> numpunct.<em>truename</em>()         return the locale language representation of &apos;true&apos;    </li>
+</ol>
+</p>
+<p>
+The thousand separator is a <em>C-string</em> of char values.
+The simplest locale is &quot;\3&quot;, which means every <em>third</em> position.
+The Nepalese locale uses &quot;\3\2&quot;, which means the third position and then every second position moving right to left.
+</p>
+<p>
+The default locale uses &apos;.&apos; as <em>decimal point</em> and &apos;,&apos; as <em>thousands separator</em>.
+However, the grouping of thousand separator is an empty string, which means <em>no</em> separators.
+</p>
+
+
+<h3> Formatting of Monetary Values </h3>
+
+<p>
+The <em>LC_MONETARY</em> facets encapsulate conversion between external character representations of monetary values and either C++ long double or string types.
+</p>
+<p>
+The internal representations assume the locale&apos;s smallest <em>non-fractional</em> currency units.  E.g. yen in Japan but cents (not) Euros in Europe.
+</p>
+<p>
+The methods provided by these facets are:
+<ol><!-- Shuffle List -->
+<li> money_put.<em>put</em>()             format a C++ numeric value for output as a character sequence  </li>
+<li> money_get.<em>get</em>()             parse a character sequence producing a numeric value           </li>
+
+<li> moneypunct.<em>decimal_point</em>()  return the &apos;decimal point&apos; character   </li>
+<li> moneypunct.<em>thousands_sep</em>()  return the &apos;thousands&apos; separator character     </li>
+<li> moneypunct.<em>grouping</em>()       return the numbers of digits between pairs of &apos;thousand&apos; separators    </li>
+<li> moneypunct.<em>frac_digits</em>()    return the number of digits to display after the decimal point (e.g. 2)        </li>
+<li> moneypunct.<em>curr_symbol</em>()    return the string to use as the currency identifier    </li>
+<li> moneypunct.<em>positive_sign</em>()  return the string to indicate a positive value         </li>
+<li> moneypunct.<em>negative_sign</em>()  return the string to indicate a negative value         </li>
+<li> moneypunct.<em>pos_format</em>()     return the formatting pattern for positive currency values     </li>
+<li> moneypunct.<em>neg_format</em>()     return the formatting pattern for negative currency values     </li>
+</ol>
+</p>
+<p>
+The currency symbol is a string:  either a (usually) <em>single</em> character (e.g. &quot;€&quot;) or the 3 letter <em>international</em> code followed by a space (e.g &quot;EUR &quot;).
+A <em>bool</em> parameter to put()/get()/curr_symbol() determines which.
+The std::showbase affects the presence of the currency symbol for currency values very much the way is affects the presence of 0x for hexadecimal values.
+</p>
+<p>
+The positive and negative signs are strings.
+If either is more than one character, all but the <em>first</em> appear at the <em>end</em> of the formatted currency value so that &quot;()&quot; gives what is wanted.
+The std::showpos has no affect on the presence of the positive sign.
+</p>
+<p>
+The positive and negative formats are each an <em>array</em> of four enumeration values.
+The locale independent default is &apos;{symbol, sign, none, value}&apos;.
+</p>
+<p>
+<em>C++ 11</em> introduces the i/o stream manipulators:
+<ol><!-- Shuffle List -->
+<li> put_money() </li>
+<li> get_money() </li>
+</ol>
+that mean that application software generally need not use these facets directly.
+</p>
+
+
+
+<h3> Formatting of Date and Time Values</h3>
+
+<p>
+The <em>LC_TIME</em> facets encapsulate conversion between external character representations and std::tm (C-style &apos;struct tm&apos;) objects.
+Conversion is derived from that of the C-function strftime().
+</p>
+<p>
+The methods provided by these facets are:
+<ol><!-- Shuffle List -->
+<li> time_put.<em>put</em>()              format contents of a std::tm struct for output as a character sequence </li>
+<li> time_get.<em>get</em>()              parse a character sequence producing a std::tm struct result   </li>
+
+<li> time_get.<em>get_time</em>()         parse a character sequence representing a time </li>
+<li> time_get.<em>get_date</em>()         parse a character sequence representing a date </li>
+<li> time_get.<em>get_weekday</em>()      parse a character sequence representing the name of a weekday  </li>
+<li> time_get.<em>get_monthname</em>()    parse a character sequence representing the name of a month    </li>
+<li> time_get.<em>get_year</em>()         parse a character sequence representing a year number  </li>
+
+<li> time_get.<em>date_order</em>()       get the enumeration value representing the date format (day, month, year permutation)      </li>
+</ol>
+</p>
+<p>
+The put() function has two forms:
+the format specifier is either a <em>single</em> character representing one of the strftime() format specifiers
+or else a <em>C-string</em> suitable for passing to strftime().
+</p>
+<p>
+The get() function is the inverse of put().
+It was introduced with <em>C++ 11</em>.
+</p>
+<p>
+The other methods only set <em>pertinent</em> members of the std::tm struct - other members are unchanged.
+</p>
+<p>
+The get_time() and get_date() conversions are the <em>inverse</em> of the strftime() &quot;%X&quot; and &quot;%x&quot; formats.
+It must be presumed that the time and date punctuation is locale dependent; the date order certainly is.
+</p>
+<p>
+Abbreviated names of <em>weekdays</em> and <em>months</em> are recognised as well as the full versions.
+They are locale language specific.
+</p>
+<p>
+It is not specified whether <em>two digit</em> year numbers are accepted nor in which century they lie.
+</p>
+
+
+
+<h3> Template Functions </h3>
+
+<p>
+A number of template functions are provided that are <em>analogous</em> to familiar C functions.
+These take, as a <em>second</em> parameter, a locale object, instead of using the (global) C locale.
+</p>
+<p>
+An example <em>implementation</em> might be:
+<pre>
+    template&lt; class charT &gt;
+    bool isspace(charT ch, const locale&amp; loc)
+    {
+       return use_facet&lt; ctype&lt;charT&gt; &gt;(loc).is(ctype_base::space, ch);
+    }
+</pre>
+</p>
+<p>
+There are a dozen template functions for character classification:
+<ol><!-- Shuffle List -->
+<li> <em>isspace</em>()   true if a character is a locale defined whitespace         </li>
+<li> <em>isblank</em>()   true if a character is a locale defined blank character    </li>
+<li> <em>iscntrl</em>()   true if a character is a locale defined control character  </li>
+<li> <em>isupper</em>()   true if a character is a locale defined uppercase          </li>
+<li> <em>islower</em>()   true if a character is a locale defined lowercase          </li>
+<li> <em>isalpha</em>()   true if a character is a locale defined alphabetic         </li>
+<li> <em>isdigit</em>()   true if a character is a locale defined digit              </li>
+<li> <em>ispunct</em>()   true if a character is a locale defined punctuation        </li>
+<li> <em>isxdigit</em>()  true if a character is a locale defined hexadecimal digit  </li>
+<li> <em>isalnum</em>()   true if a character is a locale defined alphanumeric       </li>
+<li> <em>isprint</em>()   true if a character is a locale defined printable          </li>
+<li> <em>isgraph</em>()   true if a character is a locale defined graphical          </li>
+</ol>
+</p>
+<p>
+isblank() was new with <em>C++ 11</em>.
+</p>
+<p>
+There are two template functions for character conversion:
+<ol><!-- Shuffle List -->
+<li> <em>toupper</em>()   convert a character to locale uppercase        </li>
+<li> <em>tolower</em>()   convert a character to locale lowercase        </li>
+</ol>
+</p>
+
+
+
+<h3> Problems </h3>
+
+<p>
+Setting the <em>global</em> C++ locale may have bad side effects.
+Many packages are not locale aware and may be broken.
+</p>
+<p>
+Locale names are <em>platform</em> specific as is their availability.
+UTF-8 is not supported on Windows.
+</p>
+<p>
+On some platforms the STL supports only the &quot;C&quot; and &quot;POSIX&quot; locales.
+GCC supports localisation only under <em>Linux</em>.
+</p>
+<p>
+Some locales use a <em>non-breakable</em> space as a thousands separator.
+Not all platforms handle this correctly.
+</p>
