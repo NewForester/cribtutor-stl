@@ -1,0 +1,110 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Numerics </h1>
+
+<p>
+Numerics is a collective term for a number of specialised templates concerned with
+arithmetic types but spread over several header files:
+<ol>
+<li>numeric_limits in &lt;limits&gt;</li>
+<li>functional programming in &lt;numerics&gt;</li>
+<li>complex number types in &lt;complex&gt;</li>
+<li>value arrays in &lt;valarray&gt;</li>
+</ol>
+</p>
+
+
+<h2> Numeric Limits </h2>
+
+<p>
+The &lt;limits&gt; header provides the template:
+<pre>
+    template &lt;class T&gt; numeric_limits;
+</pre>
+and a <em>specialisation</em> for each fundamental arithmetic type.
+</p>
+
+<p>
+The specialisations comprise static member variables and inline functions
+that yield the <em>properties</em> of arithmetic types.
+</p>
+
+<p>
+These specialisations are <em>independent</em> of the
+C-style preprocessor definitions in &lt;climits&gt; and &lt;cfloat&gt;
+that serve a similar purpose.
+</p>
+
+<p>
+Numeric properties include such things as:
+<ol>
+<li>value and exponent <em>ranges</em>;</li>
+<li><em>representation</em> of infinity and not-a-number;</li>
+<li>type of floating point <em>rounding</em>.</li>
+</ol>
+</p>
+
+<p>
+The properties of arithmetic types are of interest when considering
+the <em>portability</em> of cross platform applications.
+</p>
+
+<p>
+The header file also defines two <em>enumerations</em>:
+'float_round_style' and 'float_denorm_style'.
+</p>
+
+
+
+<h2> Numerics </h2>
+
+<p>
+The numeric algorithms works on C++ numeric types
+or application specific types that behave the same way.
+</p>
+<p>
+They implement <em>functional</em> programming idioms.
+See also the <em>transform</em>() and <em>generate</em>() algorithms.
+</p>
+
+<p>
+To use the numeric algorithms, include the &lt;<em>numerics</em>&gt; header file.
+</p>
+
+<p>
+All may take functors as parameters to override the defaults.
+The functors must not have <em>side effects</em>.
+</p>
+
+<p>
+<ol><!-- Shuffle List --><li>
+<em>accumulate</em>(first,last,init[,bfp])
+returns the sum of &apos;init&apos; and all the value in the range &apos;[first,last)&apos;.
+Sum is specified by the binary operator &apos;bfp&apos; and defaults to plus&lt;&gt;.
+</li><li>
+<em>partial_sum</em>(first,last,dest[,bfp])
+returns &apos;ret_it&apos; after assigning
+the partial sum over &apos;[first,last)&apos; to the range &apos;[dest,ret_it)&apos;.
+Sum is specified by &apos;bfp&apos; and defaults to plus&lt;&gt;.
+</li><li>
+<em>adjacent_difference</em>(first,last,dest[,bfp])
+returns &apos;ret_it&apos; after assigning
+the difference between adjacent values in &apos;[first,last)&apos; to the range &apos;[dest,ret_it)&apos;.
+Difference is specified by &apos;bfp&apos; and defaults to minus&lt;&gt;.
+</li><li>
+<em>inner_product</em>(first,last,start,init[,bfp1,bfp2])
+produces the sum over the product of values in the two ranges &apos;[first,last)&apos; and &apos;[start,...]&apos;.
+Sum is &apos;bfp1&apos; and product is &apos;bfp2&apos; and default to plus&lt;&gt; and multiplies&lt;&gt;.
+</li></ol>
+</p>
+
+<p>
+For partial_sum(), &apos;dest[nn]&apos; is <em>equal</em> to &apos;accumulate(first,first+nn,0,bfp)&apos;
+but the implementation is more efficient.
+</p>
+
+<p>
+For inner_product(), the result is the <em>same</em> as
+&apos;transform(first,last,start,dest,bfp2), accumulate(dest,....,init,bfp1)&apos;
+but the implementation does not require the temporary container range &apos;[dest,...)&apos;.
+</p>

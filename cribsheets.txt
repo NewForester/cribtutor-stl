@@ -48,4 +48,8 @@
 72_bitset.html
 73_locale.html
 
+# Numerics
+
+81_numerics.html
+
 # EOF
