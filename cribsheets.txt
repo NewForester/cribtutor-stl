@@ -51,5 +51,8 @@
 # Numerics
 
 81_numerics.html
+83_complex.html
+
+Boost.html
 
 # EOF

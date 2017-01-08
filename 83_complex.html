@@ -1,0 +1,172 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Numerics </h1>
+
+<h2> Complex Numbers </h2>
+
+<p>
+The &lt;complex&gt; header file provides a template class, functions and operators for complex numbers
+and overloads for transcendental functions.
+</p>
+
+<p>
+The <em>template</em> class declaration is:
+<pre>
+    template&lt; class T &gt; class complex;
+</pre>
+</p>
+
+<p>
+The STL provides three <em>specialisations</em>:
+<pre>
+    complex&lt; float &gt;
+    complex&lt; double &gt;
+    complex&lt; long double &gt;
+</pre>
+<!-- These are 'literal types' (a concept introduced with C++ 11). -->
+The effect of instantiating the complex&lt;&gt; class for any other type is unspecified.
+</p>
+
+<p>
+Internally, the complex&lt;&gt; class has one data member, which is an array of dimension 2.
+This ensures <em>binary</em> compatibility with the <em>C-language</em> complex number types.
+</p>
+
+<p>
+Thus internally, complex numbers are stored in <em>Cartesian</em> form with '[real,imaginary]' parts.
+Template functions provide for <em>polar</em> co-ordinate interpretation.
+</p>
+
+
+<h3> Constructors </h3>
+
+<p>
+The primary <em>constructor</em> is:
+<pre>
+    complex ( const T&amp; real = T(), const T&amp; im = T() );
+</pre>
+so the default constructor yields the <em>origin</em> of the complex plane.
+</p>
+
+<p>
+The <em>copy</em> constructors allow for conversion between the three complex&lt;&gt; <em>specialisations</em>.
+</p>
+
+<!--
+From C++ 11, complex&lt;&gt; constructors have the type 'constexpr'.
+-->
+
+<!--
+From C++ 14, there are functions that yield pure imaginary literal numbers.
+<pre>
+    complex&lt; double &gt; c = 1.0 + 1.0i;
+</pre>
+-->
+
+
+<h3> Member and Non Member Functions </h3>
+
+<p>
+The member functions (excluding operators) are:
+<ol><!-- Shuffle List -->
+<li>    <em>real</em>()     real part of the complex number         </li>
+<li>    <em>imag</em>()     imaginary part of the complex number    </li>
+</ol>
+These may be used to set and get the real and imaginary parts.
+</p>
+
+<p>
+The non-member functions (excluding operators) are:
+<ol><!-- Shuffle List -->
+<li>    <em>real</em>()     real part of the complex number             </li>
+<li>    <em>imag</em>()     imaginary part of the complex number        </li>
+<li>    <em>abs</em>()      polar magnitude of the complex number       </li>
+<li>    <em>arg</em>()      polar phase angle of the complex number     </li>
+<li>    <em>norm</em>()     the squared or normalised magnitude         </li>
+<li>    <em>conj</em>()     complex conjugate of complex number         </li>
+<li>    <em>polar</em>()    complex number from polar co-ordinates      </li>
+<li>    <em>proj</em>()     complex projection onto the Riemann sphere  </li>
+</ol>
+These take a complex&lt;&gt; argument.
+</p>
+
+<!--
+Since C++ 11 most also take a scalar argument that is taken to be a complex with no imaginary part.
+-->
+
+
+<h3> Operators </h3>
+
+<p>
+Most operators accept a <em>scalar</em> argument (of arbitrary numeric type).
+A scalar is taken to be a complex number with no <em>imaginary</em> part.
+</p>
+
+<p>
+The member operators are:
+<ol><!-- Shuffle List -->
+<li>    <em>operator=</em>       assignment from one complex&lt;&gt; to another    </li>
+<li>    <em>operator+=</em>      plus equals     </li>
+<li>    <em>operator-=</em>      minus equals    </li>
+<li>    <em>operator/=</em>      divide equals   </li>
+<li>    <em>operator*=</em>      times equals    </li>
+</ol>
+All but the first a accept scalar parameter.
+</p>
+
+<p>
+The non-member operators are:
+<ol><!-- Shuffle List -->
+<li>    <em>operator+</em>       unary plus         </li>
+<li>    <em>operator-</em>       unary minus        </li>
+
+<li>    <em>operator+</em>       binary plus        </li>
+<li>    <em>operator-</em>       binary minus       </li>
+<li>    <em>operator*</em>       binary times       </li>
+<li>    <em>operator/</em>       binary divide      </li>
+
+<li>    <em>operator==</em>      binary equals      </li>
+<li>    <em>operator!=</em>      binary not equals  </li>
+</ol>
+All support mixed complex/scalar arithmetic.
+</p>
+
+<p>
+The i/o stream operators are:
+<ol><!-- Shuffle List -->
+<li>    <em>operator&lt;&lt;</em>   insert a complex number into an output stream   </li>
+<li>    <em>operator&gt;&gt;</em>   extract a complex number from an input stream   </li>
+</ol>
+</p>
+<p>
+<em>Extraction</em> accepts 'real', '(real)' and '(real,imag)'.
+<em>Insertion</em> always produces '(real,imag)'.
+They are not locale aware.
+</p>
+
+
+<h3> Transcendental Functions </h3>
+
+<p>
+These are the complex versions of transcendental functions defined in &lt;cmath&gt;.
+<ol><!-- Shuffle List -->
+<li>    <em>cos</em>()      cosine of a complex number                  </li>
+<li>    <em>cosh</em>()     hyperbolic cosine of a complex number       </li>
+<li>    <em>exp</em>()      exponential of a complex number             </li>
+<li>    <em>log</em>()      natural logarithm of a complex number       </li>
+<li>    <em>log10</em>()    common logarithm of a complex number        </li>
+<li>    <em>pow</em>()      power of a complex number                   </li>
+<li>    <em>sin</em>()      sine of a complex number                    </li>
+<li>    <em>sinh</em>()     hyperbolic sine of a complex number         </li>
+<li>    <em>sqrt</em>()     square root of a complex number             </li>
+<li>    <em>tan</em>()      tangent of a complex number                 </li>
+<li>    <em>tanh</em>()     hyperbolic tangent of a complex number      </li>
+<li>    <em>acos</em>()     arc cosine of a complex number              </li>
+<li>    <em>acosh</em>()    arc hyperbolic cosine of a complex number   </li>
+<li>    <em>asin</em>()     arc sine of a complex number                </li>
+<li>    <em>asinh</em>()    arc hyperbolic sine of a complex number     </li>
+<li>    <em>atan</em>()     arc tangent of a complex number             </li>
+<li>    <em>atanh</em>()    arc hyperbolic tangent of a complex number  </li>
+</ol>
+These do not accept scalar arguments.
+</p>
