@@ -52,7 +52,6 @@
 
 81_numerics.html
 83_complex.html
-
-Boost.html
+84_valarray.html
 
 # EOF

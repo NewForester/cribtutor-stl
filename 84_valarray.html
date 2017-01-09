@@ -1,0 +1,215 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Numerics </h1>
+
+
+<h2> Value Arrays </h2>
+
+<p>
+Reference works describe valarray&lt;&gt; as being designed to hold an array of values but the name suggests that the design is of an array with value semantics.
+</p>
+
+<p>
+The valarray&lt;&gt; template class is a <em>container</em> class with a large number of member and non-member functions that implement mathematical operations on valarray objects as if they were <em>scalar</em> numeric values.
+There are several supporting classes that extend many mathematical operations to <em>subarrays</em> of valarray objects.
+</p>
+
+<p>
+Not stated is that, in practice, valarray objects are often <em>very</em> large.
+The specification allows for a number of <em>optimisations</em> including copy-on-reference, copy-on-write, memory recycling and parallelism.
+There exist implementations able to exploit the <em>parallel</em> processing capabilities of certain hardware platforms.
+</p>
+
+<p>
+The valarray&lt;&gt; template class, functions and helper classes are defined in the header file &lt;<em>valarray</em>&gt;.
+</p>
+
+<p>
+<em>Complexity</em> is not specified in the standard.
+<em>Iterators</em> are not invalidated (except by resize()).
+<em>Exceptions</em> are not thrown except possibly &apos;bad_alloc&apos;.
+Behaviour is undefined for exceptions thrown by element class operations.
+</p>
+
+<p>
+<em>Data</em> races are possible and depend on the <em>implementation</em>.
+</p>
+
+
+<h3> The Template Class valarray&lt;&gt; </h3>
+
+<p>
+The valarray&lt;&gt; template class is a <em>one</em> dimensional array.
+There are facilities that allow a valarray object to be treated as a <em>multi-dimensional</em> array.
+</p>
+
+<p>
+The only <em>explicit</em> constructor takes a single scalar parameter declaring the size of the array.
+The array&apos;s elements are <em>value</em> initialised with T().
+There are also default, copy, fill and conversion constructors.
+</p>
+
+<p>
+The value <em>semantics</em> support:
+<pre>
+    result = array op array
+    result = array op scalar
+    result = scalar op array
+</pre>
+for binary operators.
+</p>
+
+<p>
+For the first of these, the operation is applied <em>element-wise</em>.
+The result is undefined if the two valarray operands do not have the same size.
+For the other two, the operation is applied to each <em>element</em> of the valarray in conjunction with the scalar.
+</p>
+<p>
+The operator overloads implemented as member functions are:
+<ol><!-- Shuffle List -->
+<li>    <em>get/set</em>:    = and []                                                        </li>
+<li>    <em>unary</em>:      _, -, ~ and ~                                                   </li>
+<li>    <em>compound</em>:   +=, -=, *=, /=, %=, &amp;=, |=, ^=, &lt;&lt;= and &gt;&gt;=     </li>
+</ol>
+</p>
+
+<p>
+The operator overloads implemented as non-member functions are:
+<ol><!-- Shuffle List -->
+<li>    <em>arithmetic</em>: +, -, *, /, %, &amp;, |, ^, &lt;&lt;, &gt;&gt;      </li>
+<li>    <em>relational</em>: ==, !=, &lt;, &lt;=, &gt;, &gt;=                    </li>
+<li>    <em>logical</em>:    &amp;&amp;, ||                                      </li>
+</ol>
+Of these, only operator[] merits further discussion.
+</p>
+
+<p>
+The other member functions are:
+<ol><!-- Shuffle List -->
+<li>    <em>swap</em>()      - swap with another valarray                            </li>
+<li>    <em>size</em>()      - returns the size of a valarray                        </li>
+<li>    <em>resize</em>()    - changes the size of a valarray (and re-initialises)   </li>
+<li>    <em>sum</em>()       - calculates the sum of all element values              </li>
+<li>    <em>min</em>()       - returns the value of the smallest element             </li>
+<li>    <em>max</em>()       - returns the value of the largest element              </li>
+<li>    <em>shift</em>()     - zero filled shift of elements                         </li>
+<li>    <em>cshift</em>()    - circular shift of elements                            </li>
+<li>    <em>apply</em>()     - applies a function to every element of a valarray     </li>
+</ol>
+</p>
+
+<p>
+Note shift() and cshift() shift elements <em>within</em> the valarray while operator&lt;&lt;= shifts element <em>values</em>.
+A shift count that is positive/negative shifts element left/right.
+</p>
+
+<p>
+The other non-member functions are:
+<ol><!-- Shuffle List -->
+<li>    <em>mathematical</em>:   abs                                     </li>
+<li>    <em>exponential</em>:    exp, log, log10                         </li>
+<li>    <em>power</em>:          pow, sqrt                               </li>
+<li>    <em>trigonometric</em>:  sin, cos, tan, asin, acos, atan, atan2  </li>
+<li>    <em>hyperbolic</em>:     sinh, cosh, tanh                        </li>
+</ol>
+</p>
+
+
+<h3> Helper Classes and operator[] </h3>
+
+<p>
+For C++ arrays, the <em>semantics</em> of operator[] feel quite natural:
+<pre>
+    int array [4];
+    array [2] = 6;
+    int value = array [2];
+</pre>
+</p>
+
+<p>
+For the assignment to &apos;array&apos; to work, the <em>lvalue</em> &apos;array [2]&apos; returns a reference.
+The compiler deferences &apos;array [2]&apos; for <em>rvalue</em> assignment to &apos;value&apos;,
+</p>
+
+<p>
+The overloading of operator[] allows the same <em>semantics</em> for subarrays of the valarray objects.
+</p>
+
+<p>
+Consider:
+<pre>
+    valarray&lt;int&gt; array (8);
+    for (int i = 0; i &lt; 8; ++i) array[i] = i;           //  0  1  2  3  4  5  6  7
+
+    size_t selector[] = {3, 5, 6};
+    valarray&lt;std::size_t&gt; selection (selector, 3);      //           *     *  *
+
+    array[selection] *= std::valarray&lt;int&gt; (10,3);      //  0  1  2 30  4 50 60  7
+
+    valarray&lt;int&gt; newarray (3) = array[selection]       // 30 50 60
+
+    array[selection] = 0;                               //  0  1  2  0  4  0  0  7
+</pre>
+</p>
+
+<p>
+As an <em>lvalue</em>, &apos;array[selection]&apos; allows for assignment/modification, in the same operation, of the values of several elements in the valarray.
+As an <em>rvalue</em>, &apos;array[selection]&apos; allows for the assignment, in one same operation, of several values from elments of the valarray.
+</p>
+
+<p>
+The <em>implementation</em> relies on &apos;array[selection]&apos; returning an object of a special class
+that implements operator=, operator*= etc. by <em>reference</em> and
+the valarray&lt;&gt; class implementing a <em>conversion</em> constructor for the special class.
+</p>
+
+<p>
+There are four such classes:
+<ol><!-- Shuffle List -->
+<li>    <em>indirect_array</em>  - for operator[] (const valarray&lt;size_t&gt;&amp;)    </li>
+<li>    <em>mask_array</em>      - for operator[] (const valarray&lt;bool&gt;&amp;)      </li>
+<li>    <em>slice_array</em>     - for operator[] (slice)                                </li>
+<li>    <em>gslice_array</em>    - for operator[] (const gslice&amp;)                    </li>
+</ol>
+</p>
+
+<p>
+An <em>indirect_array</em> is returned when &apos;selection&apos; is a <em>list</em> of indicies.
+</p>
+
+<p>
+A <em>mask_array</em> is returned when &apos;selection&apos; is a list of <em>bools</em> with true/false signifying selected/not selected.
+</p>
+
+<p>
+A <em>slice_array</em> is returned when &apos;selection&apos; is a <em>slice</em> object:
+<pre>
+    slice (size_t start, size_t size, size_t stride)
+</pre>
+where:
+<ol>
+<li>    <em>start</em>   is the index of the first element in the slice  </li>
+<li>    <em>stride</em>  is the gaps between elements in the slice       </li>
+<li>    <em>size</em>    is the number of elements in the slice          </li>
+</ol>
+</p>
+
+<p>
+A two-dimensional array can be <em>mapped</em> onto a valarray using slice&lt;&gt; objects.
+For a MxN matrix stored in <em>row</em> order:
+<pre>
+    slice (M*row N, 1);
+    slice (col, M, N);
+</pre>
+define row and column slices respectively.
+</p>
+
+<p>
+A <em>gslice_array</em> is returned when &apos;selection&apos; is a <em>gslice</em> object:
+<pre>
+    gslice (size_t start, valarray&lt;size_t&gt; sizes, valarray&lt;size_t&gt; size_t strides)
+</pre>
+The gslice&lt;&gt; object may be used to map a multi-dimensional array onto a valarray.
+</p>
+
+<!-- EOF -->
