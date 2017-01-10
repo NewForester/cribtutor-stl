@@ -54,4 +54,8 @@
 83_complex.html
 84_valarray.html
 
+# Bits and Pieces
+
+91_utilities.html
+
 # EOF

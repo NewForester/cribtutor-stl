@@ -1,0 +1,132 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Utilities </h1>
+
+<p>
+The STL utilities are designed to work with the containers, algorithms and other classes of the STL but some may be used independently.
+</p>
+
+<p>
+They include:
+<ol>
+<li>&lt;utility&gt;   - pairs&lt;&gt;</li>
+<li>&lt;typeinfo&gt;  - typeid and dynamic cast support</li>
+<li>&lt;exception&gt; - exception base class and &apos;catch all&apos; handlers</li>
+<li>&lt;stdexcept&gt; - logic and run-time exceptions</li>
+<li>&lt;new&gt;       - low level memory management</li>
+<li>&lt;memory&gt;    - allocators and smart pointers</li>
+</ol>
+</p>
+
+
+<h2> Utilities </h2>
+
+<p>
+Specifically the few defined in the header file &lt;utility&gt;.
+</p>
+
+<h3> Pairs </h3>
+
+<p>
+A pair&lt;&gt; class template represents a pair of related items, such as a key and its value.
+</p>
+
+<p>
+pair&lt;&gt; is essential to <em>map</em> containers and is returned by algorithms/methods such as <em>equal_range</em>()
+but may be used for other application specific purposes.
+</p>
+
+<p>
+The class template provides two public data members:
+<em>first</em> (e.g. the map container key) and
+<em>second</em> (e.g. the map container value).
+</p>
+
+<p>
+The class template provides only constructors.
+In addition to the default and copy constructors, there is: <em>pair</em>(first,second).
+</p>
+
+<p>
+The function template:
+<em>make_pair</em>(first,second)
+instantiates the class template and invokes the constructor.
+It may be used to avoid explicit template instantiation.
+</p>
+
+<p>
+There are also function templates for:
+<ul>
+<li><em>operator==</em> and</li>
+<li><em>operator&lt;</em>.</li>
+</ul>
+and the other relational operators are defined in terms of these two.
+</p>
+
+
+<h3> Relational Operators </h3>
+
+<p>
+The STL containers and algorithms require, at most, that user types implement <em>operator==</em> and <em>operator&lt;</em>.
+</p>
+
+<p>
+The other four <em>relational</em> operators can be implemented in terms of these two.
+For example:
+<pre>
+    namespace rel_ops
+    {
+        template&lt; class T &gt;
+        bool operator!=( const T&amp; lhs, const T&amp; rhs )
+        {
+            return !(lhs == rhs);
+        }
+    }
+</pre>
+</p>
+
+<p>
+The <em>rel_ops</em> namespace provides template implementations of these other four operators for general use.
+</p>
+
+
+<h2> Type Information </h2>
+
+<p>
+The header file &lt;typeinfo&gt; defines one class and two exceptions.
+</p>
+
+<p>
+The <em>typeid</em> operator returns <em>type_info</em> objects.
+It may throw the <em>bad_typeid</em> exception.
+</p>
+
+<p>
+The <em>bad_cast</em> exception may be thrown by the <em>dynamic_cast</em> operator.
+</p>
+
+<p>
+The typeid operator may be applied to any type or expression that has a type.
+The qualifiers <em>const</em> and <em>volatile</em> are ignored.
+</p>
+
+<p>
+For <em>polymorphic</em> objects, RTTI is required.
+The type returns is the <em>dynamic</em> type,
+which may well not be the static type of the argument passed to the operator.
+</p>
+
+<p>
+type_info objects may be <em>compared</em> for equality and inequality and have a <em>name</em>() method.
+</p>
+
+<p>
+For comparison purposes,
+<em>derived</em> types are not equal to their base classes
+but <em>typedefs</em> are equal to the type they alias.
+</p>
+
+<p>
+The representation returned by name() is implementation specific.
+Some implementations return <em>mangled</em> names, others return <em>human readable</em> descriptions.
+</p>
