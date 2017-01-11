@@ -1,0 +1,141 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Utilities </h1>
+
+<h2> Exceptions </h2>
+
+<p>
+The header file &lt;exception&gt; defines the base exception class
+and &lt;stdexcept&gt; defines most of the derived exceptions reported by the STL.
+</p>
+
+
+<h3> The Base Exception Class </h3>
+
+<p>
+The header file &lt;<em>exception</em>&gt; defines the base class for STL exception handling.
+There is good reason for application software to derive from the exception base class.
+</p>
+
+<p>
+The base for all STL exceptions is the <em>exception</em> class.
+It is the catch-all of exceptions:
+<pre>
+    try
+    {
+      // something risky
+    }
+    catch (exception&amp; e)
+    {
+      cerr &lt;&lt; &quot;exception caught: &quot; &lt;&lt; e.what() &lt;&lt; &quot;\n&quot;;
+    }
+</pre>
+</p>
+
+<p>
+The only method of interest is <em>what</em>().
+It returns a C-string that identifies the exception.
+</p>
+
+<p>
+Functions/methods may be declared with a list of exceptions they may <em>throw</em>
+(the dynamic-exception-specifier<!-- - deprecated since C++ 11-->).
+</p>
+
+<p>
+If some other exception is thrown, <em>unexpected</em>() is called.
+It calls the current <em>unexpected handler</em>.
+By default, this handler calls terminate().
+</p>
+
+<p>
+The application may install its own unexpected handler by calling <em>set_unexpected</em>().
+This routine returns the current handler so that it can be reinstalled if appropriate.
+The application&apos;s handler must be of type <em>unexpected_handler</em> and is expected to call terminate() before (not) returning.
+</p>
+
+<p>
+The <em>unexpected handler</em> may throw another exception.
+If this too is not listed in the dynamic-exception-specifier, <em>bad_exception</em> is thrown.
+If bad_exception is thrown and not caught, terminate() is called.
+</p>
+
+<p>
+The <em>terminate</em>() function calls the current <em>termination handler</em>.
+By default this handler calls abort().
+</p>
+
+<p>
+The application may install its own termination handler by calling <em>set_terminate</em>().
+This routine returns the current handler so that it can be reinstalled if appropriate.
+The application&apos;s handler must be of type <em>terminate_handler</em> and is expected to call abort() or exit() before (not) returning.
+</p>
+
+<p>
+The function <em>uncaught_exception</em>() may be called to determine if the current function/method has
+been called between throwing an exception and catching it (i.e. while unwinding the <em>stack</em>).
+Essentially, throwing an exception in such circumstances is likely to result in an automatic call to terminate().
+</p>
+
+<p>
+<em>terminate</em>() is called whenever exception handling cannot continue.
+It and <em>unexpected</em>() may be called by application code.
+</p>
+
+
+<h3> Derived Exception Classes </h3>
+
+<p>
+The header file &lt;<em>stdexcept</em>&gt; defines exceptions for logic and runtime errors
+most of which are reported by the STL.
+There is no reason why application software cannot use many of these and good reason to derive from them.
+</p>
+
+<p>
+The derived exception types defined in the STL are:
+<ol><!-- Shuffle List -->
+<li><em>bad_alloc</em>          - failure allocating memory         </li>
+<li><em>bad_cast</em>           - failure of dynamic cast           </li>
+<li><em>bad_exception</em>      - thrown by unexpected hander       </li>
+<li><em>bad_typeid</em>         - typeid of null pointer            </li>
+<li><em>logic_error</em>        - base for logic error exceptions   </li>
+<li><em>runtime_error</em>      - base for runtime error exceptions </li>
+</ol>
+</p>
+
+<p>
+The specialisations of logic_error are:
+<ol><!-- Shuffle List -->
+<li><em>domain_error</em>       - domain error exception     </li>
+<li><em>invalid_argument</em>   - invalid argument exception </li>
+<li><em>length_error</em>       - length error exception     </li>
+<li><em>out_of_range</em>       - out-of-range exception     </li>
+</ol>
+In principle, these should be detectable before running the program.
+Typically they indicate a bad argument.
+</p>
+
+<p>
+The specialisations of runtime_error are:
+<ol><!-- Shuffle List -->
+<li><em>overflow_error</em>     - overflow error exception  </li>
+<li><em>range_error</em>        - range error exception     </li>
+<li><em>underflow_error</em>    - underflow error exception </li>
+</ol>
+Typically they indicate a bad result from some internal operation.
+</p>
+<!-- C++ 11
+<p>
+There is one specialisations of bad_alloc:
+<ol>
+<li><em>bad_array_new_length</em>   - size less than 0, too many initialisers, size greater than implementation maximum </li>
+</ol>
+This means a <em>bad_alloc</em> exception does not necessarily indicate &apos;out of memory&apos;.
+</p>
+-->
+<p>
+The base for exceptions raised during i/o operations is:
+<ol><!-- Shuffle List -->
+<li><em>ios_base</em>::<em>failure</em> - base class for stream exceptions </li>
+</ol>
+</p>

@@ -57,5 +57,6 @@
 # Bits and Pieces
 
 91_utilities.html
+93_exceptions.html
 
 # EOF
