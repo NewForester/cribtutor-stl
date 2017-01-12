@@ -1,0 +1,142 @@
+<!-- cribtutor-stl by NewForester is licensed under a Creative Commons Attribution-ShareAlike 4.0 International Licence. -->
+
+<h1> STL Utilities </h1>
+
+
+<h2> New and Delete </h2>
+
+<p>
+New and delete are the C++ equivalents of the malloc() and free() of C.
+They are used to allocate and release heap memory but there the equivalence ends.
+</p>
+
+<p>
+First, new and delete are C++ expressions.
+For a <em>new</em> expression, the compiler generates a call to &apos;operator new&apos; to allocate memory and then calls a constructor to initialise it.
+For a <em>delete</em> expression, the compiler generates a call to a destructor and then to &apos;operator delete&apos; to deallocate the memory.
+</p>
+
+<p>
+There are different forms of the new and delete expressions for arrays.
+These call <em>operator new[]</em> and <em>operator delete[]</em> and memory is initialised by
+calling the default constructor many times over.
+</p>
+
+<p>
+This is adequate for most purposes.  Alternatives are for advanced use only and require the inclusion of the &lt;<em>new</em>&gt; header file.
+This represent lower level memory management.
+For higher level memory management see the &lt;memory&gt; header file.
+</p>
+
+<p>
+In the C++ 98 standard, there are three version of operator new:
+<ol><!-- Shuffle List -->
+<li><em>default</em> new    - which may throw bad_alloc</li>
+<li><em>no throw</em> new   - which returns 0 instead of throwing an exception</li>
+<li><em>placement</em> new  - which does not allocate memory but must be passed (at least) a pointer to the memory to be initialised</li>
+</ol>
+</p>
+
+<p>
+Although available for <em>application</em> use through new expressions, all exist to support the C++ run-time.
+The STL, in particular, uses placement new.
+There are corresponding delete operators but delete expressions always use the <em>default</em> operator delete.
+</p>
+
+<p>
+The header file defines the <em>nothrow</em> constant that must be passed to the no throw version of operator new.
+</p>
+
+<p>
+All six routines are in the <em>global</em> namespace, not the std namespace.
+They are <em>replaceable</em>:  the application can implement its own routines.
+They may be <em>overridden</em> within classes.
+</p>
+
+<p>
+When operator new fails to allocate memory, it calls the <em>new handler</em> to allocate more system memory.
+It is the new handler that should throw <em>bad_alloc</em> to indicate failure.
+</p>
+
+<p>
+The application may install its own new handler by calling <em>set_new_handler</em>().
+This routine returns the current handler so that it can be reinstalled if appropriate.
+The application&apos;s handler must be of type <em>new_handler</em>.
+</p>
+
+
+<h2> Higher Level Memory Management </h2>
+
+<p>
+Lower level memory management comprises declarations for operator new and operator delete.
+Higher level memory management comprises declarations for:
+<ol>
+<li>- allocators</li>
+<li>- smart pointers</li>
+<li>- uninitialised storage (described in section 3.7 Other Algorithms)</li>
+</ol>
+<!-- C++ 11 greatly expands on this -->
+</p>
+
+
+<h3> Allocators </h3>
+
+<p>
+An allocator&lt;&gt; class template is an abstraction of
+<em>new</em> and <em>delete</em> expressions.
+</p>
+
+<p>
+<em>Containers</em> use an allocator
+to allocate/free memory and construct/destroy objects.
+</p>
+
+<p>
+The STL provides a default allocator that uses the <em>global</em> new() and delete().
+It uses the <em>placement</em> variant of new.
+</p>
+
+<p>
+The default allocator is sufficient for most purposes.
+Implementing custom allocators is a very advanced topic.
+</p>
+
+<p>
+The <em>rebind</em>() method allows for
+the allocation of a value-object wrapped in a container helper object.
+This allows one allocation for a value-objects plus any overhead
+such as a list node.
+</p>
+
+
+<h3> Smart Pointers </h3>
+
+<p>
+The auto_ptr&lt;&gt; class template implements a smart pointer for strict ownership of pointers.
+</p>
+
+<p>
+Copying an auto_ptr object transfers the pointer <em>ownership</em>.
+</p><p>
+The pointer is deleted when the owner goes out of scope.
+Therefore only pointers returned by <em>operator new</em> can be owned.
+</p>
+<p>
+These measures are intended to avoid <em>double</em> deletes and memory <em>leaks</em>.
+</p>
+
+<p>
+The auto_ptr&lt;&gt; copy semantics mean the rvalue is modified.
+Therefore auto_ptr does not have value <em>semantics</em>
+and cannot be used in value-objects stored in STL <em>containers</em>.
+</p>
+
+<p>
+Boost provides <em>shared_ptr</em>&lt;&gt; and other useful smart pointers.
+</p>
+<!--
+<p>
+C++ 11 <em>deprecates</em> auto_ptr&lt;&gt;, replacing it with <em>unique_ptr</em>&lt;&gt;.
+C++ 17 removes auto_ptr&lt;&gt; from the STL.
+</p>
+-->
