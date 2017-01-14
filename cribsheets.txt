@@ -4,6 +4,7 @@
 01_components.html
 02_class_templates.html
 03_function_templates.html
+04_header_files.html
 
 # Sequence Containers and their adaptors
 
